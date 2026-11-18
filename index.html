@@ -10,9 +10,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    :root {
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-price: 'Montserrat', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+    }
+
     * { box-sizing: border-box; }
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: var(--font-body);
       margin: 0;
       background-color: #000;
       color: #1e293b;
@@ -107,7 +113,7 @@
 
   <!-- HEADER -->
   <div class="relative z-10 flex items-center justify-between">
-    <div class="bg-red-700 text-white px-5 py-2 rounded-full shadow-lg flex items-center gap-2 border-2 border-amber-300/70">
+    <div class="bg-red-700 text-white px-5 py-2 rounded-full shadow-lg flex items-center gap-2 border-2 border-white">
       <i class="fa-solid fa-fire-flame-curved text-amber-300 text-lg"></i>
       <span class="font-extrabold uppercase tracking-wider text-[clamp(0.8rem,1.4vw,1.1rem)]">
           Comida Corrida • Hecha al Momento
