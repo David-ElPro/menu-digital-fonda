@@ -3,30 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menú Digital — Comida Corrida</title>
-
-  <!-- Google Fonts: Poppins -->
+  <title>Menú Digital — Pantalla Local</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
-      background-color: #0f172a;
+      background-color: #000;
       color: #1e293b;
-      overflow-x: hidden;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-
-    /* Fondo amarillo/naranja animado estilo McDonald's */
     .tv-animated-bg {
       background: linear-gradient(-45deg, #FFB703, #FB8500, #FFC300, #F77F00);
       background-size: 300% 300%;
@@ -37,8 +33,6 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    /* Malla de puntos animada */
     .tv-dots-overlay {
       background-image: radial-gradient(rgba(255, 255, 255, 0.25) 2px, transparent 2px);
       background-size: 28px 28px;
@@ -48,8 +42,6 @@
       from { background-position: 0 0; }
       to { background-position: 56px 56px; }
     }
-
-    /* Animación de vapor sobre platos calientes */
     .steam-particle {
       position: absolute;
       bottom: 10%;
@@ -64,21 +56,17 @@
     .steam-1 { left: 28%; animation-delay: 0s; }
     .steam-2 { left: 48%; animation-delay: 1.1s; height: 68px; width: 22px; }
     .steam-3 { left: 66%; animation-delay: 2.1s; }
-
     @keyframes riseSteam {
       0% { transform: translateY(10px) scale(0.8); opacity: 0; }
       35% { opacity: 0.65; }
       70% { opacity: 0.35; }
       100% { transform: translateY(-65px) scale(1.5) translateX(10px); opacity: 0; }
     }
-
-    /* Entradas dinámicas escalonadas */
     .anim-slide-title { animation: slideInTitle 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     .anim-pop-plate { animation: popPlate 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
     .anim-fade-up-1 { opacity: 0; animation: fadeUp 0.55s ease-out 0.2s forwards; }
     .anim-fade-up-2 { opacity: 0; animation: fadeUp 0.55s ease-out 0.35s forwards; }
     .anim-bounce-price { opacity: 0; animation: bouncePrice 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s forwards; }
-
     @keyframes slideInTitle {
       from { opacity: 0; transform: translateY(-22px) scale(0.96); }
       to { opacity: 1; transform: translateY(0) scale(1); }
@@ -96,8 +84,6 @@
       70% { opacity: 1; transform: scale(1.06) rotate(2deg); }
       100% { opacity: 1; transform: scale(1) rotate(-2deg); }
     }
-
-    /* Recorte circular perfecto para plato de barro */
     .clay-plate-wrapper {
       border-radius: 9999px;
       overflow: hidden;
@@ -108,410 +94,60 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.13); /* Recorta al ras el borde blanco/negro exterior */
+      transform: scale(1.13);
       border-radius: 9999px;
     }
-
-    /* Scrollbar limpio en panel móvil */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-<!-- BARRA SUPERIOR DE NAVEGACIÓN (Se oculta en modo Pantalla Completa TV) -->
-<header id="topNav" class="bg-slate-900 text-white px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 z-50">
-  <div class="flex items-center gap-2.5">
-    <div class="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black">
-      <i class="fa-solid fa-utensils"></i>
+<!-- LIENZO TV 16:9 ABSOLUTO Y LIMPIO -->
+<div class="w-full h-screen tv-animated-bg relative overflow-hidden flex flex-col justify-between p-[2.2%] select-none">
+  <div class="tv-dots-overlay absolute inset-0 pointer-events-none"></div>
+
+  <!-- HEADER -->
+  <div class="relative z-10 flex items-center justify-between">
+    <div class="bg-red-700 text-white px-5 py-2 rounded-full shadow-lg flex items-center gap-2 border-2 border-amber-300/70">
+      <i class="fa-solid fa-fire-flame-curved text-amber-300 text-lg"></i>
+      <span class="font-extrabold uppercase tracking-wider text-[clamp(0.8rem,1.4vw,1.1rem)]">
+          Comida Corrida • Hecha al Momento
+        </span>
     </div>
-    <div>
-      <h1 class="text-sm font-extrabold tracking-wide leading-tight">MENÚ DIGITAL TV</h1>
-      <p id="syncStatus" class="text-[11px] text-emerald-400 font-medium">
-        <i class="fa-solid fa-circle text-[7px] mr-1 animate-pulse"></i>Modo Local Activo
-      </p>
-    </div>
+    <div id="slideDots" class="flex items-center gap-1.5 bg-black/25 backdrop-blur-sm px-3.5 py-2 rounded-full"></div>
   </div>
 
-  <div class="flex items-center gap-2">
-    <button onclick="switchMode('tv')" id="btnModeTv" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 shadow transition">
-      <i class="fa-solid fa-tv mr-1.5"></i>Pantalla TV
-    </button>
-    <button onclick="switchMode('admin')" id="btnModeAdmin" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-200 hover:bg-slate-700 transition">
-      <i class="fa-solid fa-mobile-screen-button mr-1.5"></i>Panel Celular
-    </button>
-    <button onclick="toggleFullscreen()" title="Pantalla Completa para TV" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-amber-400 hover:bg-slate-700 transition">
-      <i class="fa-solid fa-expand"></i>
-    </button>
+  <!-- CONTENIDO CENTRAL -->
+  <div id="tvSlideContent" class="relative z-10 flex-1 my-[1%] flex items-center justify-between gap-[3%]"></div>
+
+  <!-- FOOTER DE POSTRES -->
+  <div class="relative z-10 bg-slate-950/85 backdrop-blur-md text-white rounded-xl px-5 py-2.5 flex flex-wrap items-center justify-between gap-2 border border-amber-400/30 shadow-lg">
+    <div class="flex items-center gap-2 text-amber-400 font-extrabold uppercase text-[clamp(0.75rem,1.2vw,0.95rem)]">
+      <i class="fa-solid fa-ice-cream"></i>
+      <span>¿Un postre o antojo?</span>
+    </div>
+    <div id="tvDessertsBar" class="flex flex-wrap items-center gap-x-6 gap-y-1 text-[clamp(0.75rem,1.2vw,0.95rem)] font-bold"></div>
   </div>
-</header>
+</div>
 
-<!-- ===================================================================== -->
-<!-- VISTA 1: PANTALLA TV (16:9 FULL HD RESPONSIVO)                        -->
-<!-- ===================================================================== -->
-<main id="viewTv" class="flex-1 flex flex-col items-center justify-center p-2 sm:p-4 bg-slate-950 relative">
-
-  <!-- Controles flotantes discretos de reproducción -->
-  <div id="tvFloatingControls" class="mb-2 flex items-center gap-2 bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-full text-xs text-slate-300">
-    <button onclick="prevSlide()" class="hover:text-amber-400 px-1.5"><i class="fa-solid fa-backward-step"></i></button>
-    <button onclick="togglePlay()" id="btnPlayPause" class="hover:text-amber-400 px-2 font-bold text-amber-400">
-      <i class="fa-solid fa-pause mr-1"></i>Auto (7s)
-    </button>
-    <button onclick="nextSlide()" class="bg-red-600 hover:bg-red-500 text-white px-2.5 py-0.5 rounded-full font-bold transition">
-      Siguiente <i class="fa-solid fa-forward-step ml-1"></i>
-    </button>
-  </div>
-
-  <!-- LIENZO TV 16:9 -->
-  <div id="tvStage" class="w-full max-w-[1280px] aspect-video tv-animated-bg rounded-2xl shadow-2xl relative overflow-hidden flex flex-col justify-between p-[2.6%] select-none border-4 border-amber-300/40">
-    <div class="tv-dots-overlay absolute inset-0 pointer-events-none"></div>
-
-    <!-- HEADER DEL MENÚ -->
-    <div class="relative z-10 flex items-center justify-between">
-      <div class="bg-red-700 text-white px-4 py-1.5 rounded-full shadow-lg flex items-center gap-2 border-2 border-amber-300/70">
-        <i class="fa-solid fa-fire-flame-curved text-amber-300"></i>
-        <span class="font-extrabold uppercase tracking-wider text-[clamp(0.65rem,1.2vw,0.95rem)]">
-            Comida Corrida • Hecha al Momento
-          </span>
-      </div>
-
-      <!-- Indicadores de diapositiva -->
-      <div id="slideDots" class="flex items-center gap-1.5 bg-black/25 backdrop-blur-sm px-3 py-1.5 rounded-full"></div>
-    </div>
-
-    <!-- CONTENIDO DINÁMICO DEL PLATILLO ACTUAL -->
-    <div id="tvSlideContent" class="relative z-10 flex-1 my-[1.5%] flex items-center justify-between gap-[3%]">
-      <!-- Se inyecta por JavaScript -->
-    </div>
-
-    <!-- FOOTER DE POSTRES Y EXTRAS -->
-    <div class="relative z-10 bg-slate-950/85 backdrop-blur-md text-white rounded-xl px-4 py-2 flex flex-wrap items-center justify-between gap-2 border border-amber-400/30 shadow-lg">
-      <div class="flex items-center gap-2 text-amber-400 font-extrabold uppercase text-[clamp(0.65rem,1.1vw,0.9rem)]">
-        <i class="fa-solid fa-ice-cream"></i>
-        <span>¿Un postre o antojo?</span>
-      </div>
-      <div id="tvDessertsBar" class="flex flex-wrap items-center gap-x-5 gap-y-1 text-[clamp(0.65rem,1.15vw,0.92rem)] font-bold">
-        <!-- Se inyecta dinámicamente -->
-      </div>
-    </div>
-  </div>
-</main>
-
-<!-- ===================================================================== -->
-<!-- VISTA 2: PANEL DE CONTROL MÓVIL (PARA TUS PADRES)                      -->
-<!-- ===================================================================== -->
-<section id="viewAdmin" class="hidden flex-1 bg-slate-100 pb-16">
-  <div class="max-w-3xl mx-auto p-4 space-y-5">
-
-    <!-- BARRA DE BAJA RÁPIDA EN TIEMPO REAL ("¡SE ACABÓ!") -->
-    <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 shadow-sm">
-      <div class="flex items-center justify-between mb-2.5">
-        <h2 class="text-sm font-black text-red-800 uppercase flex items-center gap-2">
-          <i class="fa-solid fa-bolt text-red-600"></i>
-          En Pantalla Ahorita (Toca para dar de baja si se acaba)
-        </h2>
-        <span id="activeCountBadge" class="bg-red-600 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">0 activos</span>
-      </div>
-      <div id="quickDeactivateList" class="flex flex-wrap gap-2">
-        <!-- Chips de platillos activos -->
-      </div>
-    </div>
-
-    <!-- BLOQUE 1: SOPAS Y AGUAS DEL DÍA -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Sopas del día (1 a 3) -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="font-extrabold text-slate-800 text-sm flex items-center gap-2">
-            <i class="fa-solid fa-bowl-rice text-orange-500"></i> Sopas del Día (Elige 1 a 3)
-          </h3>
-        </div>
-        <div id="adminSoupsList" class="space-y-2"></div>
-      </div>
-
-      <!-- Aguas del día (1 o 2) -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="font-extrabold text-slate-800 text-sm flex items-center gap-2">
-            <i class="fa-solid fa-glass-water text-sky-500"></i> Aguas del Día (1 o 2)
-          </h3>
-        </div>
-        <div id="adminWatersList" class="space-y-2"></div>
-      </div>
-    </div>
-
-    <!-- BLOQUE 2: POSTRES Y EXTRAS -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-      <h3 class="font-extrabold text-slate-800 text-sm mb-3 flex items-center gap-2">
-        <i class="fa-solid fa-cake-candles text-pink-500"></i> Postres y Extras en Cintillo Inferior
-      </h3>
-      <div id="adminDessertsList" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
-    </div>
-
-    <!-- BLOQUE 3: CATÁLOGO COMPLETO DE GUISADOS -->
-    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-        <div>
-          <h3 class="font-black text-slate-800 text-base flex items-center gap-2">
-            <i class="fa-solid fa-fire-burner text-amber-500"></i> Catálogo de Guisados
-          </h3>
-          <p class="text-xs text-slate-500">Activa los de hoy y selecciona su guarnición o verdura.</p>
-        </div>
-        <input type="text" id="searchDishInput" oninput="renderAdmin()" placeholder="Buscar guisado..." class="px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-amber-500 w-full sm:w-56">
-      </div>
-
-      <!-- Filtro por categoría -->
-      <div id="categoryTabs" class="flex gap-1.5 overflow-x-auto pb-2 mb-3"></div>
-
-      <!-- Lista de platillos -->
-      <div id="adminDishesList" class="space-y-3"></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ===================================================================== -->
-<!-- LÓGICA DE DATOS, CATÁLOGO COMPLETO Y MOTOR DE ANIMACIÓN               -->
-<!-- ===================================================================== -->
 <script>
-  // =========================================================================
-  // OPCIONAL: CONFIGURACIÓN DE FIREBASE PARA SINCRONIZACIÓN REAL CELULAR -> TV
-  // Si creas un proyecto en console.firebase.google.com, pega aquí tus datos:
-  // =========================================================================
-  const FIREBASE_CONFIG = null;
-  /* Ejemplo cuando lo conectes:
-  const FIREBASE_CONFIG = {
-    apiKey: "TU_API_KEY",
-    authDomain: "tu-proyecto.firebaseapp.com",
-    projectId: "tu-proyecto",
-    storageBucket: "tu-proyecto.appspot.com",
-    messagingSenderId: "123456",
-    appId: "1:123456:web:abcdef"
-  };
-  */
-
-  // =========================================================================
-  // CATÁLOGO COMPLETO DE TU MENÚ
-  // =========================================================================
-  const DEFAULT_STATE = {
-    soups: [
-      { id: 'sopa_pasta', name: 'Sopa de Pasta', active: true, color: '#ea580c' },
-      { id: 'arroz_rojo', name: 'Arroz Rojo', active: true, color: '#dc2626' },
-      { id: 'sopa_habas', name: 'Sopa de Habas', active: false, color: '#a16207' },
-      { id: 'sopa_lentejas', name: 'Lentejas', active: false, color: '#78350f' }
-    ],
-    waters: [
-      { id: 'jamaica', name: 'Jamaica', active: true, color: '#9f1239' },
-      { id: 'naranja', name: 'Naranja', active: true, color: '#f97316' },
-      { id: 'guayaba', name: 'Guayaba', active: false, color: '#fb7185' },
-      { id: 'tamarindo', name: 'Tamarindo', active: false, color: '#92400e' },
-      { id: 'limon', name: 'Limón', active: false, color: '#65a30d' }
-    ],
-    desserts: [
-      { id: 'platanos', name: 'Plátanos fritos con lechera', price: 35, active: true },
-      { id: 'gelatina', name: 'Gelatina', price: 20, active: true },
-      { id: 'flan', name: 'Flan de leche', price: 20, active: true },
-      { id: 'papas', name: 'Orden de papas a la francesa', price: 50, active: true }
-    ],
-    dishes: [
-      // --- PUERCO (Con tus nombres exactos de archivo en img/) ---
-      {
-        id: 'puerco_verde',
-        category: 'Puerco',
-        name: 'Puerco en Salsa Verde',
-        price: 95,
-        takeoutPrice: 100,
-        active: true,
-        sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas',
-        img: 'img/puercoensalsaverde.jpg',
-        sauceColor: '#4d7c0f',
-        variants: [
-          { label: 'Normal', img: 'img/puercoensalsaverde.jpg' },
-          { label: 'Con Nopales', img: 'img/puercoensalsaverdeconnopales.jpg' },
-          { label: 'Con Calabacitas', img: 'img/puercoensalsaverdeconcalabacitas.jpg' },
-          { label: 'Con Verdolagas', img: 'img/puercoensalsaverdeconverdolagas.jpg' }
-        ],
-        selectedVariant: 'Con Nopales'
-      },
-      {
-        id: 'puerco_morita',
-        category: 'Puerco',
-        name: 'Puerco en Salsa Morita',
-        price: 95,
-        takeoutPrice: 100,
-        active: true,
-        sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas',
-        img: 'img/puercoensalsamorita.jpg',
-        sauceColor: '#7f1d1d',
-        variants: [],
-        selectedVariant: ''
-      },
-      {
-        id: 'puerco_cacahuate',
-        category: 'Puerco',
-        name: 'Puerco en Salsa de Cacahuate',
-        price: 95,
-        takeoutPrice: 100,
-        active: true,
-        sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas',
-        img: 'img/puercoensalsadecacahuate.jpg',
-        sauceColor: '#b45309',
-        variants: [],
-        selectedVariant: ''
-      },
-      {
-        id: 'adobo_puerco',
-        category: 'Puerco',
-        name: 'Adobo de Puerco',
-        price: 95,
-        takeoutPrice: 100,
-        active: true,
-        sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas',
-        img: 'img/adobodepuerco.jpg',
-        sauceColor: '#581c1c',
-        variants: [],
-        selectedVariant: ''
-      },
-      {
-        id: 'puerco_jitomate',
-        category: 'Puerco',
-        name: 'Puerco en Salsa de Jitomate',
-        price: 95,
-        takeoutPrice: 100,
-        active: false,
-        sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas',
-        img: 'img/puercoensalsadejitomate.jpg',
-        sauceColor: '#b91c1c',
-        variants: [
-          { label: 'Normal', img: 'img/puercoensalsadejitomate.jpg' },
-          { label: 'Con Nopales', img: 'img/puercoensalsadejitomate.jpg' },
-          { label: 'Con Calabacitas', img: 'img/puercoensalsadejitomate.jpg' },
-          { label: 'Con Verdolagas', img: 'img/puercoensalsadejitomate.jpg' }
-        ],
-        selectedVariant: 'Normal'
-      },
-      {
-        id: 'puerco_arbol',
-        category: 'Puerco',
-        name: 'Puerco en Salsa de Árbol',
-        price: 95,
-        takeoutPrice: 100,
-        active: false,
-        sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas',
-        img: 'img/puercoensalsadearbol.jpg',
-        sauceColor: '#991b1b',
-        variants: [
-          { label: 'Normal', img: 'img/puercoensalsadearbol.jpg' },
-          { label: 'Con Nopales', img: 'img/puercoensalsadearbol.jpg' },
-          { label: 'Con Calabacitas', img: 'img/puercoensalsadearbol.jpg' }
-        ],
-        selectedVariant: 'Normal'
-      },
-      { id: 'puerco_guajillo', category: 'Puerco', name: 'Puerco en Guajillo', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/puercoenguajillo.jpg', sauceColor: '#9a3412', variants: [], selectedVariant: '' },
-      { id: 'puerco_ancho', category: 'Puerco', name: 'Puerco en Chile Ancho', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/puercoenchileancho.jpg', sauceColor: '#451a03', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'cochinita', category: 'Puerco', name: 'Cochinita Pibil', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/cochinitapibil.jpg', sauceColor: '#c2410c', variants: [], selectedVariant: '' },
-      { id: 'mole_verde_puerco', category: 'Puerco', name: 'Mole Verde con Puerco', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/moleverdeconpuerco.jpg', sauceColor: '#3f6212', variants: [], selectedVariant: '' },
-      { id: 'mole_rojo_puerco', category: 'Puerco', name: 'Mole Rojo con Puerco', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/molerojoconpuerco.jpg', sauceColor: '#4c0519', variants: [], selectedVariant: '' },
-      { id: 'bisteck_puerco_encebollado', category: 'Puerco', name: 'Bisteck de Puerco Asado Encebollado', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/bisteckpuercoencebollado.jpg', sauceColor: '#78350f', variants: [], selectedVariant: '' },
-      { id: 'bisteck_puerco_mexicana', category: 'Puerco', name: 'Bisteck de Puerco a la Mexicana', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/bisteckpuercomexicana.jpg', sauceColor: '#b91c1c', variants: [], selectedVariant: '' },
-      { id: 'carne_enchilada', category: 'Puerco', name: 'Carne Enchilada', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/carneenchilada.jpg', sauceColor: '#991b1b', variants: [], selectedVariant: '' },
-
-      // --- RES ---
-      { id: 'entomatado_verde', category: 'Res', name: 'Entomatado de Res en Salsa Verde', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/entomatadoresverde.jpg', sauceColor: '#4d7c0f', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'entomatado_jitomate', category: 'Res', name: 'Entomatado de Res en Salsa de Jitomate', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/entomatadoresjitomate.jpg', sauceColor: '#b91c1c', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'barbacoa_res', category: 'Res', name: 'Barbacoa de Res', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/barbacoares.jpg', sauceColor: '#7f1d1d', variants: [], selectedVariant: '' },
-      { id: 'asado_res_verde', category: 'Res', name: 'Asado de Res en Salsa Verde', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/asadoresverde.jpg', sauceColor: '#4d7c0f', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'asado_res_roja', category: 'Res', name: 'Asado de Res en Salsa Roja', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/asadoresroja.jpg', sauceColor: '#991b1b', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'higado_encebollado', category: 'Res', name: 'Hígado de Res Encebollado', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/higadoencebollado.jpg', sauceColor: '#451a03', variants: [], selectedVariant: '' },
-
-      // --- POLLO ---
-      { id: 'pollo_verde', category: 'Pollo', name: 'Pollo en Salsa Verde', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/polloensalsaverde.jpg', sauceColor: '#4d7c0f', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'pollo_jitomate', category: 'Pollo', name: 'Pollo en Salsa de Jitomate', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/polloensalsadejitomate.jpg', sauceColor: '#b91c1c', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'pollo_guajillo', category: 'Pollo', name: 'Pollo en Guajillo', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/polloenguajillo.jpg', sauceColor: '#9a3412', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'pollo_arbol', category: 'Pollo', name: 'Pollo en Salsa de Árbol', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/polloensalsadearbol.jpg', sauceColor: '#991b1b', variants: [{ label: 'Normal' }, { label: 'Con Nopales' }, { label: 'Con Calabacitas' }], selectedVariant: 'Normal' },
-      { id: 'adobo_pollo', category: 'Pollo', name: 'Adobo de Pollo', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/adobodepollo.jpg', sauceColor: '#581c1c', variants: [], selectedVariant: '' },
-      { id: 'pollo_crema', category: 'Pollo', name: 'Pollo en Crema', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/polloencrema.jpg', sauceColor: '#eab308', variants: [], selectedVariant: '' },
-      { id: 'pollo_crema_chipotle', category: 'Pollo', name: 'Pollo en Crema de Chipotle', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/pollocremachipotle.jpg', sauceColor: '#d97706', variants: [], selectedVariant: '' },
-      { id: 'pollo_crema_champinones', category: 'Pollo', name: 'Pollo en Crema de Champiñones', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/pollocremachampinones.jpg', sauceColor: '#ca8a04', variants: [], selectedVariant: '' },
-      { id: 'pollo_crema_poblana', category: 'Pollo', name: 'Pollo en Crema Poblana', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/pollocremapoblana.jpg', sauceColor: '#65a30d', variants: [], selectedVariant: '' },
-      { id: 'pechuga_tamarindo', category: 'Pollo', name: 'Pechuga en Salsa de Tamarindo', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/pechugatamarindo.jpg', sauceColor: '#78350f', variants: [], selectedVariant: '' },
-      { id: 'pollo_jardinera', category: 'Pollo', name: 'Pollo a la Jardinera', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/pollojardinera.jpg', sauceColor: '#c2410c', variants: [], selectedVariant: '' },
-      { id: 'mole_rojo_pollo', category: 'Pollo', name: 'Mole Rojo con Pollo', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/molerojopollo.jpg', sauceColor: '#4c0519', variants: [], selectedVariant: '' },
-      { id: 'mole_verde_pollo', category: 'Pollo', name: 'Mole Verde con Pollo', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/moleverdepollo.jpg', sauceColor: '#3f6212', variants: [], selectedVariant: '' },
-      { id: 'pollo_morita', category: 'Pollo', name: 'Pollo en Salsa Morita', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/pollosalsamorita.jpg', sauceColor: '#7f1d1d', variants: [], selectedVariant: '' },
-      { id: 'pechuga_asada', category: 'Pollo', name: 'Pechuga de Pollo Asada', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/pechugaasada.jpg', sauceColor: '#b45309', variants: [], selectedVariant: '' },
-      { id: 'milanesa_pollo', category: 'Pollo', name: 'Milanesa de Pollo', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/milanesapollo.jpg', sauceColor: '#d97706', variants: [], selectedVariant: '' },
-
-      // --- ANTOJITOS Y TRADICIONALES ---
-      { id: 'chilaquiles_verdes', category: 'Antojitos', name: 'Chilaquiles Verdes', price: 95, takeoutPrice: 100, active: false, sides: 'Con pollo o huevo, arroz o frijoles • Incluye 1L de agua', img: 'img/chilaquilesverdes.jpg', sauceColor: '#4d7c0f', variants: [{ label: 'Con Pollo' }, { label: 'Con Huevo' }], selectedVariant: 'Con Pollo' },
-      { id: 'chilaquiles_rojos', category: 'Antojitos', name: 'Chilaquiles Rojos', price: 95, takeoutPrice: 100, active: false, sides: 'Con pollo o huevo, arroz o frijoles • Incluye 1L de agua', img: 'img/chilaquilesrojos.jpg', sauceColor: '#b91c1c', variants: [{ label: 'Con Pollo' }, { label: 'Con Huevo' }], selectedVariant: 'Con Pollo' },
-      { id: 'enchiladas_verdes', category: 'Antojitos', name: 'Enchiladas Verdes', price: 95, takeoutPrice: 100, active: false, sides: 'De pollo o queso Oaxaca • Arroz o frijoles • 1L de agua', img: 'img/enchiladasverdes.jpg', sauceColor: '#4d7c0f', variants: [{ label: 'De Pollo' }, { label: 'De Queso Oaxaca' }], selectedVariant: 'De Pollo' },
-      { id: 'enmoladas', category: 'Antojitos', name: 'Enmoladas', price: 95, takeoutPrice: 100, active: false, sides: 'De pollo o queso Oaxaca • Arroz o frijoles • 1L de agua', img: 'img/enmoladas.jpg', sauceColor: '#4c0519', variants: [{ label: 'De Pollo' }, { label: 'De Queso Oaxaca' }], selectedVariant: 'De Pollo' },
-      { id: 'enchiladas_rojas', category: 'Antojitos', name: 'Enchiladas Rojas de Jitomate', price: 95, takeoutPrice: 100, active: false, sides: 'De pollo o queso Oaxaca • Arroz o frijoles • 1L de agua', img: 'img/enchiladasrojas.jpg', sauceColor: '#b91c1c', variants: [{ label: 'De Pollo' }, { label: 'De Queso Oaxaca' }], selectedVariant: 'De Pollo' },
-      { id: 'chiles_capeados', category: 'Antojitos', name: 'Chiles Rellenos Capeados', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/chilescapeados.jpg', sauceColor: '#ca8a04', variants: [], selectedVariant: '' },
-      { id: 'chiles_sin_capear', category: 'Antojitos', name: 'Chiles Rellenos Sin Capear', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz y frijoles • Incluye 1L de agua y tortillas', img: 'img/chilessincapear.jpg', sauceColor: '#3f6212', variants: [], selectedVariant: '' },
-      { id: 'tortas_papa', category: 'Antojitos', name: 'Tortas de Papa Normales', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/tortaspapa.jpg', sauceColor: '#d97706', variants: [], selectedVariant: '' },
-      { id: 'tortas_papa_phila', category: 'Antojitos', name: 'Tortas de Papa Rellenas de Philadelphia', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/tortaspapaphiladelphia.jpg', sauceColor: '#d97706', variants: [], selectedVariant: '' },
-      { id: 'croquetas_atun', category: 'Antojitos', name: 'Croquetas de Atún', price: 95, takeoutPrice: 100, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/croquetasatun.jpg', sauceColor: '#b45309', variants: [], selectedVariant: '' },
-
-      // --- CALDOS Y CLEMOLES (Sin arroz/frijoles de guarnición) ---
-      { id: 'caldo_res', category: 'Caldos', name: 'Caldo de Res con Verdura', price: 95, takeoutPrice: 100, active: false, sides: 'Incluye entrada del día, 1L de agua y tortillas', img: 'img/caldores.jpg', sauceColor: '#b45309', variants: [], selectedVariant: '' },
-      { id: 'clemole_res_rojo', category: 'Caldos', name: 'Clemole de Res con Verdura Rojo', price: 95, takeoutPrice: 100, active: false, sides: 'Incluye entrada del día, 1L de agua y tortillas', img: 'img/clemoleresrojo.jpg', sauceColor: '#991b1b', variants: [], selectedVariant: '' },
-      { id: 'clemole_res_verde', category: 'Caldos', name: 'Clemole de Res con Verdura Verde', price: 95, takeoutPrice: 100, active: false, sides: 'Incluye entrada del día, 1L de agua y tortillas', img: 'img/clemoleresverde.jpg', sauceColor: '#4d7c0f', variants: [], selectedVariant: '' },
-      { id: 'caldo_pollo', category: 'Caldos', name: 'Caldo de Pollo con Verdura', price: 95, takeoutPrice: 100, active: false, sides: 'Incluye entrada del día, 1L de agua y tortillas', img: 'img/caldopollo.jpg', sauceColor: '#eab308', variants: [], selectedVariant: '' },
-      { id: 'clemole_pollo_rojo', category: 'Caldos', name: 'Clemole de Pollo con Verdura Rojo', price: 95, takeoutPrice: 100, active: false, sides: 'Incluye entrada del día, 1L de agua y tortillas', img: 'img/clemolepollorojo.jpg', sauceColor: '#991b1b', variants: [], selectedVariant: '' },
-
-      // --- ESPECIALES ($100 y $150) ---
-      { id: 'filete_pescado', category: 'Especiales', name: 'Filete de Pescado Empanizado', price: 100, takeoutPrice: 100, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/filetepescado.jpg', sauceColor: '#d97706', variants: [], selectedVariant: '' },
-      { id: 'arrachera', category: 'Especiales', name: 'Arrachera Asada', price: 150, takeoutPrice: 150, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/arrachera.jpg', sauceColor: '#7f1d1d', variants: [], selectedVariant: '' },
-      { id: 'cecina', category: 'Especiales', name: 'Cecina', price: 150, takeoutPrice: 150, active: false, sides: 'Con arroz, frijoles y ensalada • Incluye 1L de agua y tortillas', img: 'img/cecina.jpg', sauceColor: '#9a3412', variants: [], selectedVariant: '' }
-    ]
-  };
-
-  // Estado reactivo
-  let menuState = JSON.parse(localStorage.getItem('fonda_menu_state_v1')) || DEFAULT_STATE;
   let currentSlideIdx = 0;
-  let isPlaying = true;
-  let slideTimer = null;
-  let selectedCategory = 'Todos';
 
-  function saveState() {
-    localStorage.setItem('fonda_menu_state_v1', JSON.stringify(menuState));
-    renderTvSlide();
-    renderAdmin();
-  }
-
-  // Genera un SVG realista de plato de barro si la foto aún no está subida en img/
   function getFallbackClaySvg(sauceColor = '#4d7c0f') {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
-        <circle cx="150" cy="150" r="146" fill="#9a4819"/>
-        <circle cx="150" cy="150" r="132" fill="#7c3510"/>
-        <circle cx="150" cy="150" r="126" fill="#b45309"/>
-        <!-- Arroz rojo -->
-        <path d="M150 32 A118 118 0 0 1 264 150 L150 150 Z" fill="#ea580c"/>
-        <!-- Frijoles negros -->
-        <path d="M264 150 A118 118 0 0 1 150 264 L150 150 Z" fill="#1c1917"/>
-        <!-- Guisado en salsa -->
-        <path d="M150 264 A118 118 0 0 1 150 32 L150 150 Z" fill="${sauceColor}"/>
-        <ellipse cx="105" cy="115" rx="34" ry="26" fill="#78350f" opacity="0.85"/>
-        <ellipse cx="110" cy="185" rx="36" ry="28" fill="#78350f" opacity="0.85"/>
-      </svg>`;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><circle cx="150" cy="150" r="146" fill="#9a4819"/><circle cx="150" cy="150" r="132" fill="#7c3510"/><circle cx="150" cy="150" r="126" fill="#b45309"/><path d="M150 32 A118 118 0 0 1 264 150 L150 150 Z" fill="#ea580c"/><path d="M264 150 A118 118 0 0 1 150 264 L150 150 Z" fill="#1c1917"/><path d="M150 264 A118 118 0 0 1 150 32 L150 150 Z" fill="${sauceColor}"/></svg>`;
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
   }
 
-  // =========================================================================
-  // RENDERIZADO DE LA PANTALLA TV
-  // =========================================================================
   function renderTvSlide() {
+    // Lee los datos guardados en localStorage (sincronizado con admin.html)
+    const menuState = JSON.parse(localStorage.getItem('fonda_menu_state_v1'));
+    if (!menuState) return;
+
     const activeDishes = menuState.dishes.filter(d => d.active);
     const activeSoups = menuState.soups.filter(s => s.active);
     const activeWaters = menuState.waters.filter(w => w.active);
     const activeDesserts = menuState.desserts.filter(d => d.active);
 
-    // Postres en barra inferior
-    const dessertsBar = document.getElementById('tvDessertsBar');
-    dessertsBar.innerHTML = activeDesserts.length
+    document.getElementById('tvDessertsBar').innerHTML = activeDesserts.length
             ? activeDesserts.map(d => `<span>${d.name} <strong class="text-amber-400">$${d.price}</strong></span>`).join('<span class="text-slate-600">•</span>')
             : '<span class="text-slate-400">Pregunta por nuestros postres del día</span>';
 
@@ -520,26 +156,19 @@
 
     if (activeDishes.length === 0) {
       dotsContainer.innerHTML = '';
-      stage.innerHTML = `
-          <div class="w-full text-center bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border-4 border-red-600">
-            <i class="fa-solid fa-utensils text-5xl text-red-600 mb-3"></i>
-            <h2 class="text-3xl font-black text-slate-900">¡Gracias por su preferencia!</h2>
-            <p class="text-slate-600 font-semibold mt-1">Activa los guisados de hoy desde el Panel Celular.</p>
-          </div>`;
+      stage.innerHTML = `<div class="w-full text-center bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border-4 border-red-600"><h2 class="text-3xl font-black text-slate-900">¡Gracias por su preferencia!</h2><p class="text-slate-600 font-semibold mt-1">Esperando platillos activos...</p></div>`;
       return;
     }
 
     if (currentSlideIdx >= activeDishes.length) currentSlideIdx = 0;
 
-    // Dots indicadores
     dotsContainer.innerHTML = activeDishes.map((_, idx) => `
         <span class="h-2 rounded-full transition-all duration-300 ${idx === currentSlideIdx ? 'w-6 bg-red-600' : 'w-2 bg-white/60'}"></span>
       `).join('');
 
     const dish = activeDishes[currentSlideIdx];
-    const isFlipped = currentSlideIdx % 2 === 1; // Alterna izquierda/derecha estilo McDonald's
+    const isFlipped = currentSlideIdx % 2 === 1;
 
-    // Resolver imagen de variante si aplica
     let dishImage = dish.img;
     let variantTag = '';
     if (dish.variants && dish.variants.length && dish.selectedVariant) {
@@ -552,72 +181,57 @@
 
     const fallbackSvg = getFallbackClaySvg(dish.sauceColor);
 
-    // Bloque Visual del Plato de Barro + Vapor + Badge Precio
     const plateColumn = `
         <div class="w-[44%] h-full flex items-center justify-center relative anim-pop-plate">
-          <!-- Vapor animado -->
           <div class="absolute -top-6 inset-x-0 h-24 pointer-events-none z-20">
             <div class="steam-particle steam-1"></div>
             <div class="steam-particle steam-2"></div>
             <div class="steam-particle steam-3"></div>
           </div>
-
-          <!-- Plato de barro recortado -->
-          <div class="clay-plate-wrapper w-[min(36vw,430px)] aspect-square relative z-10">
+          <div class="clay-plate-wrapper w-[min(38vw,450px)] aspect-square relative z-10">
             <img src="${dishImage}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" />
           </div>
-
-          <!-- Badge de Precio encima del guisado -->
-          <div class="anim-bounce-price absolute bottom-[3%] ${isFlipped ? 'left-[4%]' : 'right-[4%]'} z-30 bg-red-600 text-white rounded-2xl px-4 py-2.5 shadow-2xl border-4 border-white text-center">
-            <div class="text-[clamp(0.55rem,0.9vw,0.75rem)] font-extrabold uppercase tracking-wider text-amber-200 leading-none">Comer aquí</div>
-            <div class="text-[clamp(1.6rem,3.4vw,2.8rem)] font-black leading-none my-0.5">$${dish.price}<span class="text-[clamp(0.8rem,1.4vw,1.1rem)]">.00</span></div>
-            <div class="bg-slate-950 text-amber-300 text-[clamp(0.6rem,1vw,0.82rem)] font-extrabold px-2.5 py-0.5 rounded-full">
+          <div class="anim-bounce-price absolute bottom-[4%] ${isFlipped ? 'left-[4%]' : 'right-[4%]'}; z-30 bg-red-600 text-white rounded-2xl px-5 py-3 shadow-2xl border-4 border-white text-center">
+            <div class="text-[clamp(0.6rem,1vw,0.8rem)] font-extrabold uppercase tracking-wider text-amber-200 leading-none">Comer aquí</div>
+            <div class="text-[clamp(1.8rem,3.6vw,3rem)] font-black leading-none my-1">$${dish.price}<span class="text-[clamp(0.9rem,1.5vw,1.2rem)]">.00</span></div>
+            <div class="bg-slate-950 text-amber-300 text-[clamp(0.65rem,1.1vw,0.88rem)] font-extrabold px-3 py-0.5 rounded-full">
               Para llevar: $${dish.takeoutPrice}.00
             </div>
           </div>
         </div>
       `;
 
-    // Bloque de Información (Título, Sopas y Aguas)
     const infoColumn = `
-        <div class="w-[54%] h-full flex flex-col justify-between py-1">
-          <!-- Título del Guisado -->
-          <div class="anim-slide-title bg-red-700 text-white rounded-2xl p-[3.2%] shadow-xl border-b-4 border-red-900">
-            <h2 class="text-[clamp(1.3rem,2.9vw,2.45rem)] font-black uppercase leading-tight tracking-tight">
+        <div class="w-[54%] h-full flex flex-col justify-between py-2">
+          <div class="anim-slide-title bg-red-700 text-white rounded-2xl p-[3.5%] shadow-xl border-b-4 border-red-900">
+            <h2 class="text-[clamp(1.4rem,3.1vw,2.6rem)] font-black uppercase leading-tight tracking-tight">
               ${dish.name} ${variantTag}
             </h2>
-            <p class="text-amber-200 font-bold text-[clamp(0.72rem,1.25vw,1.02rem)] mt-1 flex items-center gap-1.5">
+            <p class="text-amber-200 font-bold text-[clamp(0.78rem,1.35vw,1.1rem)] mt-1.5 flex items-center gap-2">
               <i class="fa-solid fa-circle-check text-amber-300"></i> ${dish.sides}
             </p>
           </div>
-
-          <!-- Tarjetas de Sopas y Aguas del Día -->
-          <div class="grid grid-cols-2 gap-3 mt-2">
-            <!-- Sopas -->
-            <div class="anim-fade-up-1 bg-white/95 backdrop-blur-md rounded-2xl p-3 shadow-lg border-2 border-amber-300">
-              <div class="text-[clamp(0.62rem,1vw,0.8rem)] font-black uppercase text-red-700 tracking-wider mb-1.5 flex items-center gap-1.5">
+          <div class="grid grid-cols-2 gap-4 mt-2">
+            <div class="anim-fade-up-1 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border-2 border-amber-300">
+              <div class="text-[clamp(0.68rem,1.1vw,0.85rem)] font-black uppercase text-red-700 tracking-wider mb-2 flex items-center gap-2">
                 <i class="fa-solid fa-bowl-hot"></i> Entrada a Elegir
               </div>
-              <div class="flex flex-wrap gap-1.5">
+              <div class="flex flex-wrap gap-2">
                 ${activeSoups.length ? activeSoups.map(s => `
-                  <span class="bg-amber-100 text-slate-900 border border-amber-300 px-2.5 py-1 rounded-xl font-extrabold text-[clamp(0.7rem,1.15vw,0.95rem)] flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${s.color}"></span>
-                    ${s.name}
+                  <span class="bg-amber-100 text-slate-900 border border-amber-300 px-3 py-1.5 rounded-xl font-extrabold text-[clamp(0.75rem,1.2vw,1rem)] flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full" style="background:${s.color}"></span> ${s.name}
                   </span>
                 `).join('') : '<span class="text-xs text-slate-500 font-bold">Sopa del día</span>'}
               </div>
             </div>
-
-            <!-- Aguas -->
-            <div class="anim-fade-up-2 bg-white/95 backdrop-blur-md rounded-2xl p-3 shadow-lg border-2 border-amber-300">
-              <div class="text-[clamp(0.62rem,1vw,0.8rem)] font-black uppercase text-sky-700 tracking-wider mb-1.5 flex items-center gap-1.5">
+            <div class="anim-fade-up-2 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border-2 border-amber-300">
+              <div class="text-[clamp(0.68rem,1.1vw,0.85rem)] font-black uppercase text-sky-700 tracking-wider mb-2 flex items-center gap-2">
                 <i class="fa-solid fa-glass-water"></i> Agua Fresca (1 Litro)
               </div>
-              <div class="flex flex-wrap gap-1.5">
+              <div class="flex flex-wrap gap-2">
                 ${activeWaters.length ? activeWaters.map(w => `
-                  <span class="bg-sky-100 text-slate-900 border border-sky-300 px-2.5 py-1 rounded-xl font-extrabold text-[clamp(0.7rem,1.15vw,0.95rem)] flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${w.color}"></span>
-                    ${w.name}
+                  <span class="bg-sky-100 text-slate-900 border border-sky-300 px-3 py-1.5 rounded-xl font-extrabold text-[clamp(0.75rem,1.2vw,1rem)] flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full" style="background:${w.color}"></span> ${w.name}
                   </span>
                 `).join('') : '<span class="text-xs text-slate-500 font-bold">Agua del día</span>'}
               </div>
@@ -630,6 +244,8 @@
   }
 
   function nextSlide() {
+    const menuState = JSON.parse(localStorage.getItem('fonda_menu_state_v1'));
+    if (!menuState) return;
     const activeCount = menuState.dishes.filter(d => d.active).length;
     if (activeCount > 0) {
       currentSlideIdx = (currentSlideIdx + 1) % activeCount;
@@ -637,213 +253,13 @@
     }
   }
 
-  function prevSlide() {
-    const activeCount = menuState.dishes.filter(d => d.active).length;
-    if (activeCount > 0) {
-      currentSlideIdx = (currentSlideIdx - 1 + activeCount) % activeCount;
-      renderTvSlide();
-    }
-  }
+  // Rotación automática cada 7 segundos
+  setInterval(nextSlide, 7000);
 
-  function startAutoPlay() {
-    clearInterval(slideTimer);
-    slideTimer = setInterval(() => {
-      if (isPlaying) nextSlide();
-    }, 7000);
-  }
+  // Escucha cambios si desde admin.html actualizan algo en otra pestaña
+  window.addEventListener('storage', () => { renderTvSlide(); });
 
-  function togglePlay() {
-    isPlaying = !isPlaying;
-    const btn = document.getElementById('btnPlayPause');
-    btn.innerHTML = isPlaying
-            ? '<i class="fa-solid fa-pause mr-1"></i>Auto (7s)'
-            : '<i class="fa-solid fa-play mr-1"></i>Pausado';
-  }
-
-  // =========================================================================
-  // RENDERIZADO DEL PANEL DE CONTROL MÓVIL (ADMIN)
-  // =========================================================================
-  function renderAdmin() {
-    // 1. Chips de baja rápida ("¡Se acabó!")
-    const activeDishes = menuState.dishes.filter(d => d.active);
-    document.getElementById('activeCountBadge').textContent = `${activeDishes.length} activos`;
-    const quickList = document.getElementById('quickDeactivateList');
-    quickList.innerHTML = activeDishes.length
-            ? activeDishes.map(d => `
-            <button onclick="toggleDish('${d.id}')" class="bg-white hover:bg-red-600 hover:text-white text-slate-800 border border-red-300 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm transition group">
-              <span>${d.name}</span>
-              <span class="bg-red-100 text-red-700 group-hover:bg-white group-hover:text-red-700 px-1.5 py-0.5 rounded text-[10px] font-black">QUITA</span>
-            </button>
-          `).join('')
-            : '<p class="text-xs text-red-600 font-semibold">No hay platillos activos en este momento.</p>';
-
-    // 2. Sopas del día (1 a 3)
-    document.getElementById('adminSoupsList').innerHTML = menuState.soups.map(s => `
-        <label class="flex items-center justify-between p-2.5 rounded-xl border ${s.active ? 'bg-amber-50 border-amber-400' : 'bg-slate-50 border-slate-200'} cursor-pointer">
-          <span class="text-xs font-bold text-slate-800 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full" style="background:${s.color}"></span> ${s.name}
-          </span>
-          <input type="checkbox" ${s.active ? 'checked' : ''} onchange="toggleSoup('${s.id}')" class="w-5 h-5 accent-amber-500 rounded">
-        </label>
-      `).join('');
-
-    // 3. Aguas del día (1 o 2)
-    document.getElementById('adminWatersList').innerHTML = menuState.waters.map(w => `
-        <label class="flex items-center justify-between p-2.5 rounded-xl border ${w.active ? 'bg-sky-50 border-sky-400' : 'bg-slate-50 border-slate-200'} cursor-pointer">
-          <span class="text-xs font-bold text-slate-800 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full" style="background:${w.color}"></span> ${w.name}
-          </span>
-          <input type="checkbox" ${w.active ? 'checked' : ''} onchange="toggleWater('${w.id}')" class="w-5 h-5 accent-sky-500 rounded">
-        </label>
-      `).join('');
-
-    // 4. Postres
-    document.getElementById('adminDessertsList').innerHTML = menuState.desserts.map(des => `
-        <label class="flex items-center justify-between p-2.5 rounded-xl border ${des.active ? 'bg-pink-50 border-pink-300' : 'bg-slate-50 border-slate-200'} cursor-pointer">
-          <span class="text-xs font-bold text-slate-800">${des.name} <span class="text-pink-600">($${des.price})</span></span>
-          <input type="checkbox" ${des.active ? 'checked' : ''} onchange="toggleDessert('${des.id}')" class="w-5 h-5 accent-pink-500 rounded">
-        </label>
-      `).join('');
-
-    // 5. Pestañas de Categorías
-    const categories = ['Todos', 'Puerco', 'Res', 'Pollo', 'Antojitos', 'Caldos', 'Especiales'];
-    document.getElementById('categoryTabs').innerHTML = categories.map(cat => `
-        <button onclick="selectedCategory='${cat}';renderAdmin()" class="px-3 py-1 rounded-full text-xs font-extrabold whitespace-nowrap transition ${selectedCategory === cat ? 'bg-slate-900 text-amber-400' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-          ${cat}
-        </button>
-      `).join('');
-
-    // 6. Lista filtrada de Guisados
-    const query = document.getElementById('searchDishInput').value.toLowerCase();
-    const filteredDishes = menuState.dishes.filter(d => {
-      const matchCat = selectedCategory === 'Todos' || d.category === selectedCategory;
-      const matchSearch = d.name.toLowerCase().includes(query);
-      return matchCat && matchSearch;
-    });
-
-    document.getElementById('adminDishesList').innerHTML = filteredDishes.map(d => `
-        <div class="p-3 rounded-2xl border-2 transition ${d.active ? 'bg-emerald-50/70 border-emerald-500 shadow-sm' : 'bg-white border-slate-200'}">
-          <div class="flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-700 shrink-0 bg-amber-800">
-                <img src="${d.img}" onerror="this.onerror=null;this.src='${getFallbackClaySvg(d.sauceColor)}';" class="w-full h-full object-cover scale-110" />
-              </div>
-              <div>
-                <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-200 text-slate-700">${d.category}</span>
-                <h4 class="font-extrabold text-slate-900 text-sm mt-0.5">${d.name}</h4>
-                <p class="text-xs font-bold text-emerald-700">$${d.price}.00 <span class="text-slate-400 font-normal">| Llevar: $${d.takeoutPrice}.00</span></p>
-              </div>
-            </div>
-
-            <button onclick="toggleDish('${d.id}')" class="px-4 py-2 rounded-xl font-black text-xs transition shrink-0 ${d.active ? 'bg-emerald-600 text-white shadow' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
-              ${d.active ? '<i class="fa-solid fa-check mr-1"></i>ACTIVO' : 'ACTIVAR'}
-            </button>
-          </div>
-
-          ${d.variants && d.variants.length ? `
-            <div class="mt-2.5 pt-2.5 border-t border-slate-200/80 flex flex-wrap items-center gap-1.5">
-              <span class="text-[11px] font-bold text-slate-500 mr-1">Variante hoy:</span>
-              ${d.variants.map(v => `
-                <button onclick="setVariant('${d.id}', '${v.label}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition ${d.selectedVariant === v.label ? 'bg-amber-500 text-slate-950 shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-                  ${v.label}
-                </button>
-              `).join('')}
-            </div>
-          ` : ''}
-        </div>
-      `).join('');
-  }
-
-  // Acciones del panel móvil
-  function toggleDish(id) {
-    const dish = menuState.dishes.find(d => d.id === id);
-    if (dish) dish.active = !dish.active;
-    saveState();
-  }
-
-  function setVariant(id, label) {
-    const dish = menuState.dishes.find(d => d.id === id);
-    if (dish) dish.selectedVariant = label;
-    saveState();
-  }
-
-  function toggleSoup(id) {
-    const soup = menuState.soups.find(s => s.id === id);
-    const activeCount = menuState.soups.filter(s => s.active).length;
-    if (!soup.active && activeCount >= 3) {
-      alert('Máximo 3 sopas activas al mismo tiempo.');
-      renderAdmin();
-      return;
-    }
-    soup.active = !soup.active;
-    saveState();
-  }
-
-  function toggleWater(id) {
-    const water = menuState.waters.find(w => w.id === id);
-    const activeCount = menuState.waters.filter(w => w.active).length;
-    if (!water.active && activeCount >= 2) {
-      alert('Máximo 2 aguas del día activas (desactiva una primero si quieres cambiarla).');
-      renderAdmin();
-      return;
-    }
-    water.active = !water.active;
-    saveState();
-  }
-
-  function toggleDessert(id) {
-    const des = menuState.desserts.find(d => d.id === id);
-    if (des) des.active = !des.active;
-    saveState();
-  }
-
-  // Cambio entre vista TV y Panel Celular
-  function switchMode(mode) {
-    const viewTv = document.getElementById('viewTv');
-    const viewAdmin = document.getElementById('viewAdmin');
-    const btnTv = document.getElementById('btnModeTv');
-    const btnAdmin = document.getElementById('btnModeAdmin');
-
-    if (mode === 'tv') {
-      viewTv.classList.remove('hidden');
-      viewAdmin.classList.add('hidden');
-      btnTv.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 shadow transition';
-      btnAdmin.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-200 hover:bg-slate-700 transition';
-      renderTvSlide();
-    } else {
-      viewTv.classList.add('hidden');
-      viewAdmin.classList.remove('hidden');
-      btnAdmin.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 shadow transition';
-      btnTv.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-200 hover:bg-slate-700 transition';
-      renderAdmin();
-    }
-  }
-
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-      document.getElementById('topNav').classList.add('hidden');
-      document.getElementById('tvFloatingControls').classList.add('hidden');
-    } else {
-      document.exitFullscreen().catch(() => {});
-    }
-  }
-
-  document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) {
-      document.getElementById('topNav').classList.remove('hidden');
-      document.getElementById('tvFloatingControls').classList.remove('hidden');
-    }
-  });
-
-  // Soporte para abrir directo en modo admin o tv con parámetro URL (?modo=admin)
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('modo') === 'admin') {
-    switchMode('admin');
-  } else {
-    renderTvSlide();
-  }
-  startAutoPlay();
+  renderTvSlide();
 </script>
 </body>
 </html>
