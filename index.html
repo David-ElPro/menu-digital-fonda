@@ -6,7 +6,7 @@
   <title>Menú Digital — Pantalla Local</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -103,16 +103,51 @@
       transform: scale(1.13);
       border-radius: 9999px;
     }
+
+    .font-display { font-family: var(--font-display); letter-spacing: .03em; }
+    .font-price { font-family: var(--font-price); }
+    .tv-screen { width: 100%; height: 100dvh; padding: 1.2vh 1.5vw; gap: 1vh; }
+    .tv-header { flex: 0 0 auto; }
+    .tv-header > div:first-child { background: #80510bc9; border: 0; padding: .45vh 1.2vw; }
+    .tv-header span { font-size: clamp(10px, 1.35vw, 24px); }
+    #tvSlideContent { min-height: 0; width: 88%; margin: 0 auto; flex: 1; gap: 6%; justify-content: center; }
+    .plate-column { width: 40%; position: relative; flex: 0 0 40%; aspect-ratio: 1; }
+    .clay-plate-wrapper { width: 100%; height: 100%; }
+    .fresh-tag { position: absolute; top: -3%; left: 0; z-index: 25; padding: .35em .9em; background: #ffe18a; border: 2px solid white; border-radius: 99px; color: #20170d; font-size: clamp(10px, 1.2vw, 23px); font-weight: 900; }
+    .plate-column > .steam { position: absolute; top: -5%; left: 10%; width: 65%; height: 35%; z-index: 20; pointer-events: none; }
+    .price-card { position: absolute; right: -5%; bottom: -7%; z-index: 30; width: 75%; padding: 2% 4%; border: max(3px, .4vw) solid white; border-radius: 1.7vw; background: #cc191e; color: white; text-align: center; box-shadow: 0 1.3vw 2vw #59300066; }
+    .price-label { display: inline-block; background: #ffdc32; color: #302007; border-radius: .5em; padding: .1em .65em; font-size: clamp(10px, 1.25vw, 24px); font-weight: 900; text-transform: uppercase; }
+    .price-value { font-size: clamp(30px, 5vw, 100px); line-height: 1.05; font-weight: 900; letter-spacing: -.065em; }
+    .price-value small { font-size: .38em; color: #ffdc32; letter-spacing: -.03em; }
+    .takeout { background: #17131b; color: #ffdc32; border-radius: .65em; padding: .25em; font-size: clamp(10px, 1.35vw, 26px); font-weight: 900; white-space: nowrap; }
+    .info-column { width: 54%; display: flex; flex-direction: column; gap: 1.6vh; }
+    .dish-heading { position: relative; background: #c41920; color: white; text-align: center; border: .25vw solid #f79955; border-radius: 1.8vw; padding: 1.5vh 1.4vw; box-shadow: 0 .7vw 1vw #9d47032b; }
+    .dish-heading h2 { margin: 0; font-size: clamp(26px, 5.2vw, 100px); line-height: 1.05; text-wrap: balance; font-weight: 400; }
+    .dish-heading p { margin: .6vh 0 0; color: #fff0bc; font-size: clamp(10px, 1.5vw, 28px); font-weight: 700; line-height: 1.4; }
+    .dish-tag { position: absolute; right: 0; bottom: 100%; background: #17131b; color: #ffce16; border-radius: 1vw 1vw 0 0; padding: .25em 1em; font-size: clamp(9px, 1.2vw, 23px); font-weight: 900; text-transform: uppercase; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vw; }
+    .option-card { min-width: 0; background: #fffaf0; border: .25vw solid #ffdc6b; border-radius: 1.8vw; padding: 1vh .8vw; box-shadow: 0 .7vw 1vw #9d47032b; text-align: center; }
+    .option-title { display: inline-block; background: #fff0bd; color: #b61920; border-radius: 99px; padding: .25em .8em; font-size: clamp(9px, 1.15vw, 22px); font-weight: 900; text-transform: uppercase; }
+    .water-card .option-title { color: #006a94; background: #e0f2fe; }
+    .option-list { display: flex; justify-content: space-evenly; gap: .5vw; margin-top: 1vh; }
+    .menu-option { flex: 1; min-width: 0; font-size: clamp(9px, 1.2vw, 23px); font-weight: 800; line-height: 1.2; }
+    .option-icon { display: flex; align-items: center; justify-content: center; width: 5vw; height: 5vw; margin: 0 auto .7vh; border-radius: 50%; border: .5vw solid white; outline: 1px solid #eedfc0; background: var(--option-color); color: #fff5ce; font-size: 2.5vw; box-shadow: 0 .2vw .4vw #0002; }
+    .tv-footer { flex: 0 0 auto; border-radius: 99px; padding: .35vh 1vw; gap: 1vw; flex-wrap: nowrap; }
+    .tv-footer > div:first-child { font-size: clamp(9px, 1.1vw, 21px); white-space: nowrap; }
+    #tvDessertsBar { flex: 1; justify-content: center; gap: .5vw; font-size: clamp(9px, 1.1vw, 21px); line-height: 1.4; }
+    @media (min-aspect-ratio: 2/1) { #tvSlideContent { width: 76%; } .plate-column { width: min(32vw, 62vh); flex-basis: min(32vw, 62vh); } }
+    @media (max-aspect-ratio: 1/1) { body { overflow-y: auto; } .tv-screen { height: auto; min-height: 100dvh; } #tvSlideContent { flex-direction: column; gap: 8vh; padding: 5vh 0; } .plate-column { width: 65%; flex-basis: auto; } .info-column { width: 100%; } .dish-heading h2 { font-size: 8vw; } .option-icon { width: 10vw; height: 10vw; font-size: 5vw; } .tv-footer { flex-wrap: wrap; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; } }
   </style>
 </head>
 <body>
 
 <!-- LIENZO TV 16:9 ABSOLUTO Y LIMPIO -->
-<div class="w-full h-screen tv-animated-bg relative overflow-hidden flex flex-col justify-between p-[2.2%] select-none">
+<div class="tv-screen w-full h-screen tv-animated-bg relative overflow-hidden flex flex-col justify-between p-[2.2%] select-none">
   <div class="tv-dots-overlay absolute inset-0 pointer-events-none"></div>
 
   <!-- HEADER -->
-  <div class="relative z-10 flex items-center justify-between">
+  <div class="tv-header relative z-10 flex items-center justify-between">
     <div class="bg-red-700 text-white px-5 py-2 rounded-full shadow-lg flex items-center gap-2 border-2 border-white">
       <i class="fa-solid fa-fire-flame-curved text-amber-300 text-lg"></i>
       <span class="font-extrabold uppercase tracking-wider text-[clamp(0.8rem,1.4vw,1.1rem)]">
@@ -126,10 +161,10 @@
   <div id="tvSlideContent" class="relative z-10 flex-1 my-[1%] flex items-center justify-between gap-[3%]"></div>
 
   <!-- FOOTER DE POSTRES -->
-  <div class="relative z-10 bg-slate-950/85 backdrop-blur-md text-white rounded-xl px-5 py-2.5 flex flex-wrap items-center justify-between gap-2 border border-amber-400/30 shadow-lg">
+  <div class="tv-footer relative z-10 bg-slate-950/85 backdrop-blur-md text-white rounded-xl px-5 py-2.5 flex flex-wrap items-center justify-between gap-2 border border-amber-400/30 shadow-lg">
     <div class="flex items-center gap-2 text-amber-400 font-extrabold uppercase text-[clamp(0.75rem,1.2vw,0.95rem)]">
       <i class="fa-solid fa-ice-cream"></i>
-      <span>¿Un postre o antojo?</span>
+      <span>Postres y extras</span>
     </div>
     <div id="tvDessertsBar" class="flex flex-wrap items-center gap-x-6 gap-y-1 text-[clamp(0.75rem,1.2vw,0.95rem)] font-bold"></div>
   </div>
@@ -173,80 +208,47 @@
       `).join('');
 
     const dish = activeDishes[currentSlideIdx];
-    const isFlipped = currentSlideIdx % 2 === 1;
 
     let dishImage = dish.img;
-    let variantTag = '';
-    if (dish.variants && dish.variants.length && dish.selectedVariant) {
+    if (dish.variants && dish.selectedVariant) {
       const foundVar = dish.variants.find(v => v.label === dish.selectedVariant);
       if (foundVar && foundVar.img) dishImage = foundVar.img;
-      if (dish.selectedVariant !== 'Normal') {
-        variantTag = `<span class="inline-block bg-amber-300 text-red-950 font-black uppercase px-3 py-0.5 rounded-full text-[clamp(0.7rem,1.2vw,1rem)] ml-2 align-middle shadow">${dish.selectedVariant}</span>`;
-      }
     }
 
     const fallbackSvg = getFallbackClaySvg(dish.sauceColor);
 
     const plateColumn = `
-        <div class="w-[44%] h-full flex items-center justify-center relative anim-pop-plate">
-          <div class="absolute -top-6 inset-x-0 h-24 pointer-events-none z-20">
-            <div class="steam-particle steam-1"></div>
-            <div class="steam-particle steam-2"></div>
-            <div class="steam-particle steam-3"></div>
-          </div>
-          <div class="clay-plate-wrapper w-[min(38vw,450px)] aspect-square relative z-10">
-            <img src="${dishImage}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" />
-          </div>
-          <div class="anim-bounce-price absolute bottom-[4%] ${isFlipped ? 'left-[4%]' : 'right-[4%]'}; z-30 bg-red-600 text-white rounded-2xl px-5 py-3 shadow-2xl border-4 border-white text-center">
-            <div class="text-[clamp(0.6rem,1vw,0.8rem)] font-extrabold uppercase tracking-wider text-amber-200 leading-none">Comer aquí</div>
-            <div class="text-[clamp(1.8rem,3.6vw,3rem)] font-black leading-none my-1">$${dish.price}<span class="text-[clamp(0.9rem,1.5vw,1.2rem)]">.00</span></div>
-            <div class="bg-slate-950 text-amber-300 text-[clamp(0.65rem,1.1vw,0.88rem)] font-extrabold px-3 py-0.5 rounded-full">
-              Para llevar: $${dish.takeoutPrice}.00
-            </div>
-          </div>
+      <div class="plate-column anim-pop-plate">
+        <div class="fresh-tag"><i class="fa-solid fa-fire text-red-600"></i> RECIÉN SERVIDO</div>
+        <div class="steam"><div class="steam-particle steam-1"></div><div class="steam-particle steam-2"></div><div class="steam-particle steam-3"></div></div>
+        <div class="clay-plate-wrapper"><img src="${dishImage}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" /></div>
+        <div class="price-card anim-bounce-price">
+          <div class="price-label">Comer aquí</div>
+          <div class="price-value font-price">$${dish.price}<small>.00</small></div>
+          <div class="takeout font-price"><i class="fa-solid fa-bag-shopping"></i> Para llevar: $${dish.takeoutPrice}.00</div>
         </div>
-      `;
+      </div>`;
+
+    function renderOptions(items, icon, fallback) {
+      return items.length ? items.map(item => `
+        <div class="menu-option"><span class="option-icon" style="--option-color:${item.color}"><i class="fa-solid ${icon}" aria-hidden="true"></i></span><span>${item.name}</span></div>
+      `).join('') : `<div class="menu-option">${fallback}</div>`;
+    }
 
     const infoColumn = `
-        <div class="w-[54%] h-full flex flex-col justify-between py-2">
-          <div class="anim-slide-title bg-red-700 text-white rounded-2xl p-[3.5%] shadow-xl border-b-4 border-red-900">
-            <h2 class="text-[clamp(1.4rem,3.1vw,2.6rem)] font-black uppercase leading-tight tracking-tight">
-              ${dish.name} ${variantTag}
-            </h2>
-            <p class="text-amber-200 font-bold text-[clamp(0.78rem,1.35vw,1.1rem)] mt-1.5 flex items-center gap-2">
-              <i class="fa-solid fa-circle-check text-amber-300"></i> ${dish.sides}
-            </p>
-          </div>
-          <div class="grid grid-cols-2 gap-4 mt-2">
-            <div class="anim-fade-up-1 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border-2 border-amber-300">
-              <div class="text-[clamp(0.68rem,1.1vw,0.85rem)] font-black uppercase text-red-700 tracking-wider mb-2 flex items-center gap-2">
-                <i class="fa-solid fa-bowl-hot"></i> Entrada a Elegir
-              </div>
-              <div class="flex flex-wrap gap-2">
-                ${activeSoups.length ? activeSoups.map(s => `
-                  <span class="bg-amber-100 text-slate-900 border border-amber-300 px-3 py-1.5 rounded-xl font-extrabold text-[clamp(0.75rem,1.2vw,1rem)] flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background:${s.color}"></span> ${s.name}
-                  </span>
-                `).join('') : '<span class="text-xs text-slate-500 font-bold">Sopa del día</span>'}
-              </div>
-            </div>
-            <div class="anim-fade-up-2 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-lg border-2 border-amber-300">
-              <div class="text-[clamp(0.68rem,1.1vw,0.85rem)] font-black uppercase text-sky-700 tracking-wider mb-2 flex items-center gap-2">
-                <i class="fa-solid fa-glass-water"></i> Agua Fresca (1 Litro)
-              </div>
-              <div class="flex flex-wrap gap-2">
-                ${activeWaters.length ? activeWaters.map(w => `
-                  <span class="bg-sky-100 text-slate-900 border border-sky-300 px-3 py-1.5 rounded-xl font-extrabold text-[clamp(0.75rem,1.2vw,1rem)] flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full" style="background:${w.color}"></span> ${w.name}
-                  </span>
-                `).join('') : '<span class="text-xs text-slate-500 font-bold">Agua del día</span>'}
-              </div>
-            </div>
-          </div>
+      <div class="info-column">
+        <div class="dish-heading anim-slide-title">
+          <div class="dish-tag">${dish.selectedVariant && dish.selectedVariant !== 'Normal' ? dish.selectedVariant : 'Tradicional'}</div>
+          <h2 class="font-display">${dish.name}</h2>
+          <p><i class="fa-solid fa-circle-check text-amber-300"></i> ${dish.sides}</p>
         </div>
-      `;
+        <div class="options-grid">
+          <div class="option-card anim-fade-up-1"><div class="option-title">Entrada a elegir</div><div class="option-list">${renderOptions(activeSoups, 'fa-bowl-rice', 'Sopa del día')}</div></div>
+          <div class="option-card water-card anim-fade-up-2"><div class="option-title">Agua del día (1 litro)</div><div class="option-list">${renderOptions(activeWaters, 'fa-glass-water', 'Agua del día')}</div></div>
+        </div>
+      </div>`;
 
-    stage.innerHTML = isFlipped ? (plateColumn + infoColumn) : (infoColumn + plateColumn);
+    stage.innerHTML = plateColumn + infoColumn;
   }
 
   function nextSlide() {
