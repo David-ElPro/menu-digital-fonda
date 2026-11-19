@@ -152,3 +152,5 @@ Ejecuta `node tests/menu.test.cjs` y `node tests/cloud.test.cjs` para comprobar 
 Los scripts compartidos se cargan con una versión basada en su contenido para evitar mezclar archivos anteriores tras publicar. Cuando se modifique `menu-state.js` o `firebase-sync.js`, hay que actualizar su parámetro `?v=` en ambos HTML; `node tests/menu.test.cjs` comprueba que coincida con los primeros 12 caracteres del SHA-256 del archivo.
 
 Prueba adicional: `node tests/display.test.cjs` comprueba la rotación de los fondos, la diapositiva de tres postres, disponibilidad, precios editados y el estado vacío. Se revisó la geometría del vapor y del precio en navegador a 1920×1080 y 3840×2160: sin intersección ni desbordamiento horizontal.
+
+La presentación de guisados utiliza tarjetas crema, títulos con palabras de color según la salsa y entrada escalonada, fotografías grandes para entradas y aguas, ondas orgánicas de fondo y destellos animados. El precio tiene un pulso suave. Las animaciones respetan `prefers-reduced-motion`; no alteran los precios ni las selecciones guardadas.

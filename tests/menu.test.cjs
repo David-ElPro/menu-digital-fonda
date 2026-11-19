@@ -51,7 +51,7 @@ const reopened=page('admin.html');
 assert.equal(reopened.ctx.FondaMenu.load().dishes.find(d=>d.id==='pozole_pollo').price,110.5);
 let state=reopened.ctx.FondaMenu.load();state.dishes.forEach(d=>d.active=d.id==='pozole_pollo');reopened.ctx.FondaMenu.save(state);
 tv.events.storage({key:'fonda_menu_state_v1'});
-assert(tv.nodes.tvSlideContent.innerHTML.includes('$110<small>.50</small>'));
+assert(tv.nodes.tvSlideContent.innerHTML.replace(/<[^>]*>/g, '').includes('$110.50'));
 assert(tv.nodes.tvSlideContent.innerHTML.includes('tacosdorados.png'));
 console.log('OK: precio editable persiste y se muestra con centavos');
 await admin.run("editPrice('dishes','pozole_pollo','price',{value:'110',setCustomValidity(){},reportValidity(){}});confirmSave()");
