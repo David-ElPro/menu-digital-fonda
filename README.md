@@ -46,13 +46,13 @@ El panel permite editar precios para comer aquí y para llevar, y precios de pos
 
 ## Catálogo y paquetes
 
-El catálogo de `menu-state.js` incluye 53 platillos de Puerco, Res, Pollo, Antojitos, Caldos, Especiales y Paquetes, además de 4 entradas, 5 aguas y 4 postres o extras. Los nuevos platillos inician desactivados; al actualizar se conservan las activaciones y variantes válidas guardadas por el usuario. Las fotografías y datos del catálogo se actualizan automáticamente sin borrar el almacenamiento. Desde la versión 3 se conservan también los precios editados; al migrar versiones anteriores se toman los precios del catálogo, incluidos ambos paquetes de pozole a $110.
+El catálogo de `menu-state.js` incluye 54 platillos de Puerco, Res, Pollo, Antojitos, Caldos, Especiales y Paquetes, además de 4 entradas, 5 aguas y 4 postres o extras. Los nuevos platillos inician desactivados; al actualizar se conservan las activaciones y variantes válidas guardadas por el usuario. Las fotografías y datos del catálogo se actualizan automáticamente sin borrar el almacenamiento. Desde la versión 3 se conservan también los precios editados; al migrar versiones anteriores se toman los precios del catálogo, incluidos ambos paquetes de pozole a $110.
 
 Los guisados regulares cuestan $95 para comer aquí y $100 para llevar; el filete empanizado, $100 en ambas modalidades; arrachera y cecina, $150 para comer aquí. La arrachera conserva su precio anterior de $150 para llevar; la cecina no muestra precio para llevar porque no se especificó.
 
 **Pozole de pollo y de puerco:** activar cualquiera muestra su paquete de $110 con fotografía del pozole, orden de tacos dorados y 1L de agua. La tarjeta de tacos sustituye las entradas de sopa únicamente en esa diapositiva. No se indica precio para llevar del paquete porque no está definido.
 
-Las sopas y aguas usan las fotos disponibles en `img/`. Naranja y los alimentos sin fotografía utilizan una representación de respaldo. Los tres postres dulces se reúnen en una diapositiva independiente al final del ciclo; solo aparecen los que están activos y utilizan los precios guardados en el admin. Pancita y mojarra tienen archivos disponibles pero no se añadieron al catálogo porque no se proporcionaron sus precios ni acompañamientos.
+Las sopas y aguas usan las fotos disponibles en `img/`. Naranja y los alimentos sin fotografía utilizan una representación de respaldo. Los tres postres dulces se reúnen en una diapositiva independiente al final del ciclo; solo aparecen los que están activos y utilizan los precios guardados en el admin. La pancita está en Caldos con su fotografía e inicia desactivada. Tiene los precios iniciales de los otros caldos ($95 aquí y $100 para llevar), editables en el panel. La mojarra sigue pendiente de definir precio y acompañamientos.
 
 ## Cómo ejecutarlo localmente
 

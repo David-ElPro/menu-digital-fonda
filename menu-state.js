@@ -670,6 +670,20 @@
       "includesSoup": true
     },
     {
+      "id": "pancita",
+      "category": "Caldos",
+      "name": "Pancita",
+      "price": 95,
+      "takeoutPrice": 100,
+      "active": false,
+      "sides": "Incluye entrada del día, 1L de agua y tortillas",
+      "img": "img/pancita.png",
+      "sauceColor": "#9a3412",
+      "variants": [],
+      "selectedVariant": "",
+      "includesSoup": true
+    },
+    {
       "id": "caldo_res",
       "category": "Caldos",
       "name": "Caldo de Res con Verdura",
