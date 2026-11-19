@@ -1,6 +1,6 @@
 // Configuración web pública de cocina-guerrero; las reglas protegen las escrituras.
 (function () {
-  const ADMIN_UIDS = ['cI41h5DZGURJgjNAkhBK5SEfLL33', 'tNm9qnzrcicgyc4Oj6rmcdlAIE83'];
+  const ADMIN_UIDS = ['cI41h5DZGURJgjNAkhBK5SEfLL33', 'tNm9qnzrcicgyc4Oj6rmcdlAIE83', 'uII1zdgYFjVldt9z6CmgOr6V8El2'];
   const info = { ready: false, connected: false, user: null, authorized: false, saving: false, error: '', empty: false };
   let sdk, auth, db, menuRef;
   const announce = () => window.dispatchEvent(new CustomEvent('fonda-cloud-status', {detail: {...info}}));

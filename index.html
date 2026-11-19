@@ -99,6 +99,17 @@
       box-shadow: 0 22px 38px rgba(120, 40, 0, 0.45), inset 0 0 0 4px rgba(154, 72, 25, 0.35);
       background: #8c3f19;
     }
+    .clay-plate-wrapper::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: clamp(6px, .72vw, 26px) solid #fffdf8;
+      box-shadow: inset 0 0 0 1px #ded7cd, inset 0 2px 4px #a1927b25;
+      border-radius: inherit;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .clay-plate-wrapper.natural-rim::after { display: none; }
     .clay-plate-img {
       width: 100%;
       height: 100%;
@@ -161,6 +172,15 @@
     .dessert-intro > p:last-child { margin: 0; font-size: clamp(12px, 1.35vw, 28px); font-weight: 600; }
     .dessert-grid { display: grid; grid-template-columns: repeat(var(--dessert-count, 3), minmax(0, 1fr)); gap: 2.2vw; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 2; }
     .dessert-card { position: relative; border: max(3px, .3vw) solid #fff; border-radius: 2.6vw; padding: 1.3vh 1.2vw 1.8vh; background: #fff8efed; box-shadow: 0 1vh 0 #a35b8e16, 0 1.6vh 3vh #71345920; text-align: center; display: flex; align-items: center; flex-direction: column; }
+    .dessert-card { animation: dessertBounceIn .9s ease-out .12s both; transform-origin: center; }
+    .dessert-card:nth-child(2) { animation-delay: .36s; }
+    .dessert-card:nth-child(3) { animation-delay: .6s; }
+    @keyframes dessertBounceIn {
+      0% { opacity: 0; transform: translateY(24px) scale(.65); }
+      55% { opacity: 1; transform: translateY(-5px) scale(1.05); }
+      75% { opacity: 1; transform: translateY(3px) scale(.975); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
     .dessert-card:nth-child(2) { background: #fff0f7ed; }
     .dessert-card:nth-child(3) { background: #f6efffed; }
     .dessert-art { width: 100%; height: clamp(130px, 25vh, 600px); object-fit: contain; filter: drop-shadow(0 1vh .6vh #ab648123); }
@@ -223,8 +243,8 @@
     .tv-screen[data-kind="dish"] .option-icon img { background: transparent; filter: drop-shadow(0 .5vh .5vh #893d2320); }
     .tv-screen[data-kind="dish"] .option-icon > i { background: var(--option-color); border-radius: 50%; padding: .6em; font-size: 2vw; }
     .tv-screen[data-kind="dish"] .price-card { background: linear-gradient(125deg, #f32632, #ce0d1b); border-radius: 2.8vw; width: 84%; right: -2%; padding: 4% 4% 3%; }
-    .price-card::after { content: ''; position: absolute; inset: .6vw; border: 1px dashed #ffffff80; border-radius: 2.1vw; pointer-events: none; }
-    .tv-screen[data-kind="dish"] .price-label { position: relative; margin-top: -10%; display: table; margin-left: auto; margin-right: auto; padding: .3em 1em; border-radius: .7em; background: linear-gradient(100deg,#ffe96e,#ffcd27); font-size: clamp(12px,1.65vw,38px); text-transform: none; }
+    .price-card::after { z-index: 0; content: ''; position: absolute; inset: .6vw; border: 1px dashed #ffffff80; border-radius: 2.1vw; pointer-events: none; }
+    .tv-screen[data-kind="dish"] .price-label { position: relative; z-index: 1; margin-top: -10%; display: table; margin-left: auto; margin-right: auto; padding: .3em 1em; border-radius: .7em; background: linear-gradient(100deg,#ffe96e,#ffcd27); font-size: clamp(12px,1.65vw,38px); text-transform: none; }
     .tv-screen[data-kind="dish"] .price-value { font-size: clamp(40px, 6.4vw, 150px); }
     .tv-screen[data-kind="dish"] .takeout { background: #9b1017; font-size: clamp(12px,1.5vw,34px); padding: .3em; }
     .price-value > span { display: inline-block; animation: priceNudge 4.5s ease-in-out 1s infinite; }
@@ -308,9 +328,9 @@
 
   function renderDesserts(desserts) {
     const candy = `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M30 40L7 23v50l23-15m40-18l23-17v50L70 58" fill="#ed86ae"/><rect x="25" y="25" width="50" height="50" rx="18" fill="#fff1c9" stroke="#fff" stroke-width="3"/><path d="M39 28l22 44M28 39l13 28m18-37l13 26" stroke="#c19ae8" stroke-width="9"/></svg>`;
-    return `<section class="dessert-page anim-slide-title" aria-label="Postres disponibles">
+    return `<section class="dessert-page" aria-label="Postres disponibles">
       <div class="sweet-decor sweet-decor-left">${candy}</div><div class="sweet-decor sweet-decor-right">${candy}</div>
-      <header class="dessert-intro"><p class="dessert-eyebrow">Siempre hay lugar para algo dulce</p><h2 class="font-display">¡El final más dulce!</h2><p>Elige tu postre favorito</p></header>
+      <header class="dessert-intro anim-slide-title"><p class="dessert-eyebrow">Siempre hay lugar para algo dulce</p><h2 class="font-display">¡El final más dulce!</h2><p>Elige tu postre favorito</p></header>
       <div class="dessert-grid" style="--dessert-count:${desserts.length}">${desserts.map(item => {
         const price = Number(item.price).toFixed(2).split('.');
         return `<article class="dessert-card">${item.img ? `<img class="dessert-art" src="${item.img}" alt="${item.name}" onerror="this.hidden=true;this.nextElementSibling.hidden=false;"><div hidden>${dessertIllustration(item.id)}</div>` : dessertIllustration(item.id)}<h3>${item.name}</h3><div class="dessert-price font-price">$${price[0]}<small>.${price[1]}</small></div><p class="dessert-caption">Un antojito para sonreír</p></article>`;
@@ -322,7 +342,7 @@
     return name.split(' ').map((word, index) => `<span class="title-word ${/^verdes?$/i.test(word) ? 'green-word' : /^(rojo|roja|rojos|rojas|morita|adobo)$/i.test(word) ? 'red-word' : ''}" style="--word:${index}">${word}</span>`).join(' ');
   }
   function accentRays(extraClass = '') {
-    return `<svg class="accent-rays ${extraClass}" viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"><path d="M21 17l19 25M54 9l5 27M9 53l25 9"/></svg>`;
+    return `<svg class="accent-rays ${extraClass}" viewBox="0 0 100 100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"><path transform="${extraClass === 'heading-rays' ? 'translate(100 0) scale(-1 1)' : ''}" d="M21 17l19 25M54 9l5 27M9 53l25 9"/></svg>`;
   }
 
   function renderTvSlide() {
@@ -376,7 +396,7 @@
         <div style="color:#fff8d6">${accentRays()}</div>
         <div class="fresh-tag"><i class="fa-solid fa-fire text-red-600"></i> RECIÉN SERVIDO</div>
         <div class="steam" aria-hidden="true"><div class="steam-particle steam-1"></div><div class="steam-particle steam-2"></div><div class="steam-particle steam-3"></div><div class="steam-particle steam-4"></div></div>
-        <div class="clay-plate-wrapper"><img src="${dishImage || fallbackSvg}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" /></div>
+        <div class="clay-plate-wrapper ${dish.id === 'adobo_puerco' ? 'natural-rim' : ''}"><img src="${dishImage || fallbackSvg}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" /></div>
         <div class="price-card anim-bounce-price">
           <div class="price-label">${dish.packageItems ? 'Paquete completo' : 'Comer aquí'}</div>
           <div class="price-value font-price"><span>$${Number(dish.price).toFixed(2).split('.')[0]}</span><small>.${Number(dish.price).toFixed(2).split('.')[1]}</small></div>
