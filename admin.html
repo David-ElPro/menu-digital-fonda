@@ -21,7 +21,7 @@
         </div>
         <div>
             <h1 class="text-sm font-extrabold tracking-wide leading-tight">PANEL DE CONTROL</h1>
-            <p class="text-[11px] text-emerald-400 font-medium">Sincronizado con la Pantalla</p>
+            <p class="text-[11px] text-emerald-400 font-medium">Menú compartido • Guarda para aplicar</p>
         </div>
     </div>
     <a href="index.html" target="_blank" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 shadow">
@@ -29,13 +29,29 @@
     </a>
 </header>
 
-<main class="max-w-3xl mx-auto p-4 space-y-5 mt-2">
+<section class="max-w-3xl mx-auto p-4">
+  <p id="cloudStatus" role="status" aria-live="polite" class="text-sm font-bold mb-3">Conectando con Firebase…</p>
+  <form id="loginForm" onsubmit="loginAdmin(event)" class="bg-white rounded-2xl p-5 border space-y-3">
+    <h2 class="font-extrabold text-lg">Entrar al panel</h2>
+    <p class="text-sm text-slate-500">Usa tu cuenta o la de tu papá.</p>
+    <label class="block text-sm">Correo<input id="loginEmail" type="email" autocomplete="username" required class="block w-full border rounded-lg p-2 mt-1"></label>
+    <label class="block text-sm">Contraseña<input id="loginPassword" type="password" autocomplete="current-password" required class="block w-full border rounded-lg p-2 mt-1"></label>
+    <button id="loginButton" type="submit" class="bg-slate-900 text-white rounded-xl px-4 py-2 font-bold">Iniciar sesión</button>
+    <p id="loginError" role="alert" class="text-red-700 text-sm"></p>
+  </form>
+  <div id="accountBar" hidden class="mt-3"><span id="accountEmail" class="text-sm"></span> <button onclick="logoutAdmin()" class="text-red-700 font-bold text-sm ml-3">Cerrar sesión</button></div>
+</section>
+<main id="adminPanel" hidden class="max-w-3xl mx-auto p-4 space-y-5 mt-2">
+    <div class="bg-white border rounded-2xl p-4 flex items-center justify-between gap-3 sticky top-16 z-40 shadow">
+      <p id="saveStatus" role="status" aria-live="polite" class="text-sm font-bold">Sin cambios pendientes</p>
+      <button id="saveButton" onclick="openSaveModal()" disabled class="bg-emerald-700 disabled:opacity-40 text-white rounded-xl px-4 py-2 font-bold text-sm">Guardar cambios</button>
+    </div>
 
     <!-- BAJA RÁPIDA -->
     <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 shadow-sm">
         <div class="flex items-center justify-between mb-2.5">
             <h2 class="text-sm font-black text-red-800 uppercase flex items-center gap-2">
-                <i class="fa-solid fa-bolt text-red-600"></i> En Pantalla Ahorita (Toca para quitar si se acaba)
+                <i class="fa-solid fa-bolt text-red-600"></i> Disponibles en el menú (toca para retirar)
             </h2>
             <span id="activeCountBadge" class="bg-red-600 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">0 activos</span>
         </div>
@@ -73,23 +89,102 @@
                 <h3 class="font-black text-slate-800 text-base flex items-center gap-2">
                     <i class="fa-solid fa-fire-burner text-amber-500"></i> Catálogo de Guisados
                 </h3>
-                <p class="text-xs text-slate-500">Activa los de hoy y cambia variantes al instante.</p>
+                <p class="text-xs text-slate-500">Selecciona disponibilidad, variantes y precios. Guarda para aplicar.</p>
             </div>
             <input type="text" id="searchDishInput" oninput="renderAdmin()" placeholder="Buscar guisado..." class="px-3 py-2 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-amber-500 w-full sm:w-56">
         </div>
+        <label class="text-xs font-bold block mb-3">Disponibilidad
+          <select id="availabilityFilter" onchange="renderAdmin()" class="border rounded-lg p-2 ml-2"><option value="all">Todos</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select>
+        </label>
         <div id="categoryTabs" class="flex gap-1.5 overflow-x-auto pb-2 mb-3"></div>
         <div id="adminDishesList" class="space-y-3"></div>
     </div>
 
 </main>
+<dialog id="saveModal" aria-labelledby="saveModalTitle" class="rounded-2xl p-6 w-full max-w-md shadow-2xl backdrop:bg-black/60">
+  <h2 id="saveModalTitle" class="font-extrabold text-xl">¿Guardar cambios?</h2>
+  <p class="text-sm text-slate-600 mt-2">Se aplicarán al menú de la pantalla y los demás dispositivos. Revisa el resumen antes de confirmar.</p>
+  <ul id="changeSummary" class="text-sm my-4 space-y-2 max-h-60 overflow-auto"></ul>
+  <p id="saveError" role="alert" class="text-red-700 text-sm"></p>
+  <div class="flex flex-wrap gap-2 mt-4">
+    <button onclick="confirmSave()" class="bg-emerald-700 text-white rounded-xl px-4 py-2 font-bold">Guardar y aplicar</button>
+    <button onclick="document.getElementById('saveModal').close()" class="bg-slate-100 rounded-xl px-4 py-2">Seguir editando</button>
+    <button onclick="discardChanges()" class="text-red-700 px-3 py-2">Descartar cambios</button>
+  </div>
+</dialog>
 
-<script src="menu-state.js"></script>
+<script src="menu-state.js?v=43e59bbda8a9"></script>
+<script src="firebase-sync.js?v=c67952c12182"></script>
 <script>
+    let publishing = false;
     let menuState = FondaMenu.load();
     let selectedCategory = 'Todos';
+    let savedState = structuredClone(menuState);
+    const money = value => Number(value).toFixed(2);
+    const normalize = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    function pendingChanges() {
+      const changes = [];
+      for (const key of ['dishes', 'soups', 'waters', 'desserts']) {
+        for (const item of menuState[key]) {
+          const previous = savedState[key].find(old => old.id === item.id);
+          if (!previous) continue;
+          for (const field of ['active', 'selectedVariant', 'price', 'takeoutPrice']) {
+            if (item[field] !== previous[field]) changes.push({key, id:item.id, name:item.name, field, value:item[field]});
+          }
+        }
+      }
+      return changes;
+    }
+    function updateSaveStatus() {
+      const count = pendingChanges().length;
+      document.getElementById('saveStatus').textContent = publishing ? 'Guardando en Firebase…' : count ? `${count} cambio(s) sin guardar` : FondaCloud.info.empty ? 'Publica el menú inicial para conectarlo a la pantalla' : 'Sin cambios pendientes';
+      document.getElementById('saveButton').disabled = publishing || !FondaCloud.info.authorized || !FondaCloud.info.ready || !FondaCloud.info.connected || (!count && !FondaCloud.info.empty);
+    }
+    function openSaveModal() {
+      const changes = pendingChanges();
+      if (!changes.length && !FondaCloud.info.empty) return;
+      const labels = {active:'Disponibilidad', selectedVariant:'Variante', price:'Precio aquí', takeoutPrice:'Precio para llevar'};
+      document.getElementById('changeSummary').innerHTML = changes.map(c => `<li><strong>${escapeHtml(c.name)}</strong>: ${labels[c.field]} → ${escapeHtml(c.field === 'active' ? (c.value ? 'Activo' : 'Inactivo') : c.field.includes('rice') ? (c.value == null ? 'Sin precio para llevar' : '$'+money(c.value)) : c.value)}</li>`).join('') || '<li>Publicar el menú de este panel por primera vez.</li>';
+      document.getElementById('saveError').textContent = '';
+      if (!document.getElementById('saveModal').open) document.getElementById('saveModal').showModal();
+    }
+    async function confirmSave() {
+      if (publishing) return;
+      publishing = true;
+      const dialogButtons = document.getElementById('saveModal').querySelectorAll('button');
+      dialogButtons.forEach(button => button.disabled = true);
+      updateSaveStatus();
+      try {
+        const latest = await FondaCloud.publish(pendingChanges(), menuState);
+        menuState = latest;
+        savedState = structuredClone(latest);
+        document.getElementById('saveModal').close();
+      } catch (error) {
+        document.getElementById('saveError').textContent = error.message;
+      } finally {
+        publishing = false;
+        dialogButtons.forEach(button => button.disabled = false);
+        renderAdmin();
+      }
+    }
+    function discardChanges() {
+      menuState = FondaMenu.load(); savedState = structuredClone(menuState);
+      document.getElementById('saveModal').close(); renderAdmin();
+    }
+    function editPrice(key, id, field, input) {
+      const value = input.value.trim();
+      const price = value === '' && field === 'takeoutPrice' ? null : Number(value);
+      if ((value === '' && field !== 'takeoutPrice') || (price !== null && (!Number.isFinite(price) || price < 0 || price > 99999 || Math.abs(price * 100 - Math.round(price * 100)) > .00001))) {
+        input.setCustomValidity('Escribe un precio de 0 a 99999 con máximo dos decimales.'); input.reportValidity(); return;
+      }
+      input.setCustomValidity('');
+      menuState[key].find(item => item.id === id)[field] = price;
+      saveState();
+    }
 
     function saveState() {
-        FondaMenu.save(menuState);
         renderAdmin();
     }
 
@@ -99,6 +194,7 @@
     }
 
     function renderAdmin() {
+        updateSaveStatus();
         const activeDishes = menuState.dishes.filter(d => d.active);
         document.getElementById('activeCountBadge').textContent = `${activeDishes.length} activos`;
 
@@ -130,10 +226,12 @@
       `).join('');
 
         document.getElementById('adminDessertsList').innerHTML = menuState.desserts.map(des => `
-        <label class="flex items-center justify-between p-2.5 rounded-xl border ${des.active ? 'bg-pink-50 border-pink-300' : 'bg-slate-50 border-slate-200'} cursor-pointer">
-          <span class="text-xs font-bold text-slate-800">${des.name} <span class="text-pink-600">($${des.price})</span></span>
-          <input type="checkbox" ${des.active ? 'checked' : ''} onchange="toggleDessert('${des.id}')" class="w-5 h-5 accent-pink-500 rounded">
-        </label>
+        <div class="p-3 rounded-xl border ${des.active ? 'bg-pink-50 border-pink-300' : 'bg-slate-50 border-slate-200'}">
+          <label class="flex items-center justify-between gap-2 text-xs font-bold"><span>${des.name}</span>
+            <input type="checkbox" ${des.active ? 'checked' : ''} onchange="toggleDessert('${des.id}')" class="w-5 h-5 accent-pink-500">
+          </label>
+          <label class="text-xs mt-2 block">Precio $ <input type="number" min="0" max="99999" step="0.01" value="${des.price}" onchange="editPrice('desserts','${des.id}','price',this)" class="border rounded-lg p-2 w-24"></label>
+        </div>
       `).join('');
 
         const categories = ['Todos', 'Puerco', 'Res', 'Pollo', 'Antojitos', 'Caldos', 'Especiales', 'Paquetes'];
@@ -143,14 +241,16 @@
         </button>
       `).join('');
 
-        const query = document.getElementById('searchDishInput').value.toLowerCase();
+        const query = normalize(document.getElementById('searchDishInput').value);
+        const availability = document.getElementById('availabilityFilter').value;
         const filteredDishes = menuState.dishes.filter(d => {
             const matchCat = selectedCategory === 'Todos' || d.category === selectedCategory;
-            const matchSearch = d.name.toLowerCase().includes(query);
-            return matchCat && matchSearch;
-        });
+            const matchSearch = normalize(d.name).includes(query);
+            return matchCat && matchSearch && (availability === 'all' || (availability === 'active' ? d.active : !d.active));
+        }).sort((a,b) => categories.indexOf(a.category) - categories.indexOf(b.category));
 
-        document.getElementById('adminDishesList').innerHTML = filteredDishes.map(d => `
+        document.getElementById('adminDishesList').innerHTML = filteredDishes.map((d, index) => `
+        ${index === 0 || filteredDishes[index-1].category !== d.category ? `<h3 class="font-extrabold pt-4 text-lg">${d.category}</h3>` : ''}
         <div class="p-3 rounded-2xl border-2 transition ${d.active ? 'bg-emerald-50/70 border-emerald-500 shadow-sm' : 'bg-white border-slate-200'}">
           <div class="flex items-center justify-between gap-3">
             <div class="flex items-center gap-3">
@@ -161,12 +261,16 @@
                 <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-200 text-slate-700">${d.category}</span>
                 <h4 class="font-extrabold text-slate-900 text-sm mt-0.5">${d.name}</h4>
                 ${d.packageItems ? `<p class="text-xs font-bold text-amber-700">Incluye orden de tacos dorados y 1L de agua</p>` : ''}
-                <p class="text-xs font-bold text-emerald-700">$${d.price}.00 ${d.takeoutPrice != null ? `<span class="text-slate-400 font-normal">| Llevar: $${d.takeoutPrice}.00</span>` : ''}</p>
+                <p class="text-xs font-bold text-emerald-700">$${money(d.price)} ${d.takeoutPrice != null ? `<span class="text-slate-400 font-normal">| Llevar: $${money(d.takeoutPrice)}</span>` : ''}</p>
               </div>
             </div>
             <button onclick="toggleDish('${d.id}')" class="px-4 py-2 rounded-xl font-black text-xs transition shrink-0 ${d.active ? 'bg-emerald-600 text-white shadow' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
               ${d.active ? '<i class="fa-solid fa-check mr-1"></i>ACTIVO' : 'ACTIVAR'}
             </button>
+          </div>
+          <div class="flex flex-wrap gap-3 mt-3 text-xs font-bold">
+            <label>Precio aquí $<input type="number" min="0" max="99999" step="0.01" value="${d.price}" onchange="editPrice('dishes','${d.id}','price',this)" class="block border rounded-lg p-2 w-28"></label>
+            <label>Para llevar $<input type="number" min="0" max="99999" step="0.01" value="${d.takeoutPrice ?? ''}" placeholder="Sin precio" onchange="editPrice('dishes','${d.id}','takeoutPrice',this)" class="block border rounded-lg p-2 w-28"></label>
           </div>
           ${d.variants && d.variants.length ? `
             <div class="mt-2.5 pt-2.5 border-t border-slate-200/80 flex flex-wrap items-center gap-1.5">
@@ -179,7 +283,7 @@
             </div>
           ` : ''}
         </div>
-      `).join('');
+      `).join('') || '<p class="text-sm text-slate-500 py-6">No hay platillos con estos filtros.</p>';
     }
 
     function toggleDish(id) {
@@ -216,11 +320,50 @@
         saveState();
     }
 
-    window.addEventListener('storage', event => {
-        if (event.key === 'fonda_menu_state_v1' || event.key === null) {
-            menuState = FondaMenu.load();
+    function refreshSharedMenu() {
+            const changes = pendingChanges();
+            menuState = FondaMenu.load(); savedState = structuredClone(menuState);
+            for (const change of changes) {
+              const item = menuState[change.key].find(item=>item.id===change.id);
+              if (item) item[change.field] = change.value;
+            }
             renderAdmin();
-        }
+            if (!publishing && document.getElementById('saveModal').open) openSaveModal();
+    }
+    window.addEventListener('fonda-menu-updated', refreshSharedMenu);
+    window.addEventListener('storage', event => {
+      if (event.key === 'fonda_menu_state_v1' || event.key === null) refreshSharedMenu();
+    });
+    async function loginAdmin(event) {
+      event.preventDefault();
+      document.getElementById('loginButton').disabled = true;
+      document.getElementById('loginError').textContent = '';
+      try {
+        await FondaCloud.login(document.getElementById('loginEmail').value.trim(), document.getElementById('loginPassword').value);
+        document.getElementById('loginPassword').value = '';
+      } catch (error) { document.getElementById('loginError').textContent = error.message; }
+      finally { document.getElementById('loginButton').disabled = false; }
+    }
+    async function logoutAdmin() {
+      if (publishing) return;
+      if (pendingChanges().length && !confirm('Hay cambios sin guardar. ¿Cerrar sesión y descartarlos?')) return;
+      try { await FondaCloud.logout(); discardChanges(); }
+      catch (error) { document.getElementById('loginError').textContent = 'No se pudo cerrar sesión. Inténtalo otra vez.'; }
+    }
+    function refreshCloudStatus() {
+      const info = FondaCloud.info;
+      document.getElementById('adminPanel').hidden = !info.authorized;
+      document.getElementById('loginForm').hidden = !!info.user;
+      document.getElementById('accountBar').hidden = !info.user;
+      document.getElementById('accountEmail').textContent = info.user ? info.user.email : '';
+      document.getElementById('cloudStatus').textContent = info.error || (info.user && !info.authorized ? 'Esta cuenta no tiene permiso para administrar el menú.' : info.connected ? (info.empty ? 'Conectado • Falta publicar el menú inicial' : 'Conectado • Menú compartido en tiempo real') : 'Conectando con Firebase • No se pueden publicar cambios sin conexión');
+      updateSaveStatus();
+    }
+    document.getElementById('saveModal').addEventListener('cancel', event => {if (publishing) event.preventDefault();});
+    window.addEventListener('fonda-cloud-status', refreshCloudStatus);
+    refreshCloudStatus();
+    window.addEventListener('beforeunload', event => {
+      if (pendingChanges().length) { event.preventDefault(); event.returnValue = ''; }
     });
     renderAdmin();
 </script>

@@ -3,7 +3,7 @@
   'use strict';
   const STORAGE_KEY = 'fonda_menu_state_v1';
   const DEFAULT_STATE = {
-  "catalogVersion": 2,
+  "catalogVersion": 3,
   "dishes": [
     {
       "id": "puerco_verde",
@@ -1037,16 +1037,18 @@
     }
   }
 
-  function load() {
-    try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (validState(stored)) {
+  function normalize(stored) {
+    if (!validState(stored)) throw new Error('El menú compartido tiene un formato inválido.');
         const merged = JSON.parse(JSON.stringify(DEFAULT_STATE));
         for (const key of ['dishes', 'soups', 'waters', 'desserts']) {
           merged[key] = merged[key].map(item => {
             const previous = stored[key].find(saved => saved.id === item.id);
             if (!previous) return item;
             if (typeof previous.active === 'boolean') item.active = previous.active;
+            if (stored.catalogVersion >= 3) {
+              if (Number.isFinite(previous.price) && previous.price >= 0) item.price = previous.price;
+              if (previous.takeoutPrice === null || Number.isFinite(previous.takeoutPrice) && previous.takeoutPrice >= 0) item.takeoutPrice = previous.takeoutPrice;
+            }
             if (item.variants && item.variants.some(v => v.label === previous.selectedVariant)) {
               item.selectedVariant = previous.selectedVariant;
             }
@@ -1054,6 +1056,14 @@
           });
           merged[key].push(...stored[key].filter(saved => !merged[key].some(item => item.id === saved.id)));
         }
+    return merged;
+  }
+
+  function load() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (validState(stored)) {
+        const merged = normalize(stored);
         if (JSON.stringify(merged) !== JSON.stringify(stored)) save(merged);
         return merged;
       }
@@ -1069,5 +1079,5 @@
     const variant = (dish.variants || []).find(item => item.label === dish.selectedVariant);
     return variant && variant.img || dish.img;
   }
-  window.FondaMenu = { load, save, dishImage };
+  window.FondaMenu = { load, save, dishImage, normalize };
 })();

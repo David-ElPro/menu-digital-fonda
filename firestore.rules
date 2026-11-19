@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.uid in [
+        'cI41h5DZGURJgjNAkhBK5SEfLL33',
+        'tNm9qnzrcicgyc4Oj6rmcdlAIE83'
+      ];
+    }
+    match /menus/principal {
+      allow get: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['state', 'updatedAt', 'updatedBy'])
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.state is map
+        && request.resource.data.state.keys().hasAll(['catalogVersion', 'dishes', 'soups', 'waters', 'desserts'])
+        && request.resource.data.state.catalogVersion == 3
+        && request.resource.data.state.dishes is list
+        && request.resource.data.state.dishes.size() <= 200
+        && request.resource.data.state.soups is list
+        && request.resource.data.state.soups.size() <= 20
+        && request.resource.data.state.waters is list
+        && request.resource.data.state.waters.size() <= 20
+        && request.resource.data.state.desserts is list
+        && request.resource.data.state.desserts.size() <= 50;
+      allow list, delete: if false;
+    }
+  }
+}

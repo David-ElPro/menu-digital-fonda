@@ -30,7 +30,7 @@
       align-items: center;
     }
     .tv-animated-bg {
-      background: linear-gradient(-45deg, #FFB703, #FB8500, #FFC300, #F77F00);
+      background: linear-gradient(-45deg, var(--bg-1, #FFB703), var(--bg-2, #FB8500), var(--bg-3, #FFC300), var(--bg-4, #F77F00));
       background-size: 300% 300%;
       animation: gradientFlow 12s ease infinite;
     }
@@ -50,23 +50,26 @@
     }
     .steam-particle {
       position: absolute;
-      bottom: 10%;
-      width: 18px;
-      height: 55px;
-      background: radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 75%);
-      border-radius: 50%;
-      filter: blur(6px);
+      bottom: 0;
+      width: 18%;
+      height: 74%;
+      background: radial-gradient(ellipse at 50% 65%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.5) 30%, rgba(255,255,255,0) 72%);
+      border-radius: 48% 52% 38% 62%;
+      filter: blur(clamp(3px, .55vw, 11px));
       opacity: 0;
-      animation: riseSteam 3.2s ease-in-out infinite;
+      transform-origin: center bottom;
+      animation: riseSteam 4s ease-in-out infinite;
     }
-    .steam-1 { left: 28%; animation-delay: 0s; }
-    .steam-2 { left: 48%; animation-delay: 1.1s; height: 68px; width: 22px; }
-    .steam-3 { left: 66%; animation-delay: 2.1s; }
+    .steam-1 { left: 10%; animation-delay: -1s; }
+    .steam-2 { left: 32%; height: 95%; width: 22%; animation-delay: -2.7s; }
+    .steam-3 { left: 58%; height: 82%; animation-delay: -.2s; }
+    .steam-4 { left: 77%; height: 65%; width: 15%; animation-delay: -3.5s; }
     @keyframes riseSteam {
-      0% { transform: translateY(10px) scale(0.8); opacity: 0; }
-      35% { opacity: 0.65; }
-      70% { opacity: 0.35; }
-      100% { transform: translateY(-65px) scale(1.5) translateX(10px); opacity: 0; }
+      0% { transform: translate(0, 15%) scale(.65, .7) rotate(-8deg); opacity: 0; }
+      20% { opacity: .65; }
+      45% { transform: translate(-10%, -28%) scale(1, 1.1) rotate(8deg); opacity: .75; }
+      75% { opacity: .5; }
+      100% { transform: translate(22%, -95%) scale(1.45, 1.35) rotate(-10deg); opacity: 0; }
     }
     .anim-slide-title { animation: slideInTitle 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     .anim-pop-plate { animation: popPlate 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
@@ -111,10 +114,10 @@
     .tv-header > div:first-child { background: #80510bc9; border: 0; padding: .45vh 1.2vw; }
     .tv-header span { font-size: clamp(10px, 1.35vw, 24px); }
     #tvSlideContent { min-height: 0; width: 88%; margin: 0 auto; flex: 1; gap: 6%; justify-content: center; }
-    .plate-column { width: 40%; position: relative; flex: 0 0 40%; aspect-ratio: 1; }
-    .clay-plate-wrapper { width: 100%; height: 100%; }
+    .plate-column { width: min(35.2vw, 61vh); position: relative; flex: 0 0 min(35.2vw, 61vh); aspect-ratio: 1; isolation: isolate; }
+    .clay-plate-wrapper { width: 100%; height: 100%; position: relative; z-index: 10; }
     .fresh-tag { position: absolute; top: -3%; left: 0; z-index: 25; padding: .35em .9em; background: #ffe18a; border: 2px solid white; border-radius: 99px; color: #20170d; font-size: clamp(10px, 1.2vw, 23px); font-weight: 900; }
-    .plate-column > .steam { position: absolute; top: -5%; left: 10%; width: 65%; height: 35%; z-index: 20; pointer-events: none; }
+    .plate-column > .steam { position: absolute; top: -16%; left: 18%; width: 64%; height: 34%; z-index: 20; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 65%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 65%, transparent); pointer-events: none; }
     .price-card { position: absolute; right: -5%; bottom: -7%; z-index: 30; width: 75%; padding: 2% 4%; border: max(3px, .4vw) solid white; border-radius: 1.7vw; background: #cc191e; color: white; text-align: center; box-shadow: 0 1.3vw 2vw #59300066; }
     .price-label { display: inline-block; background: #ffdc32; color: #302007; border-radius: .5em; padding: .1em .65em; font-size: clamp(10px, 1.25vw, 24px); font-weight: 900; text-transform: uppercase; }
     .price-value { font-size: clamp(30px, 5vw, 100px); line-height: 1.05; font-weight: 900; letter-spacing: -.065em; }
@@ -141,20 +144,60 @@
     #tvDessertsBar { flex: 1; justify-content: center; gap: .5vw; font-size: clamp(9px, 1.1vw, 21px); line-height: 1.4; }
     @media (min-aspect-ratio: 2/1) { #tvSlideContent { width: 76%; } .plate-column { width: min(32vw, 62vh); flex-basis: min(32vw, 62vh); } }
     @media (max-aspect-ratio: 1/1) { body { overflow-y: auto; } .tv-screen { height: auto; min-height: 100dvh; } #tvSlideContent { flex-direction: column; gap: 8vh; padding: 5vh 0; } .plate-column { width: 65%; flex-basis: auto; } .info-column { width: 100%; } .dish-heading h2 { font-size: 8vw; } .option-icon { width: 10vw; height: 10vw; font-size: 5vw; } .tv-footer { flex-wrap: wrap; } }
+
+    .slide-dot { width: .7vw; height: .7vw; min-width: 8px; min-height: 8px; border-radius: 99px; border: 0; background: #ffffff99; cursor: pointer; padding: 0; }
+    .slide-dot.selected { width: 2vw; background: #dc2626; }
+    .slide-dot:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .tv-screen[data-theme="sunset"] { --bg-1: #ff9e23; --bg-2: #ee481f; --bg-3: #ff7a18; --bg-4: #f6ad35; }
+    .tv-screen[data-theme="sweets"] { --bg-1: #fbd0e4; --bg-2: #dfc6ff; --bg-3: #fff0da; --bg-4: #f9b8d1; }
+    .tv-screen[data-theme="sweets"] .tv-dots-overlay { background-image: radial-gradient(#fff9 2px, transparent 2px); }
+    .tv-screen[data-theme="sweets"] .tv-header > div:first-child { background: #793f7b; }
+    .tv-screen[data-kind="desserts"] #tvSlideContent { width: 94%; }
+    .dessert-page { width: 100%; position: relative; display: flex; flex-direction: column; gap: 2.2vh; padding: 1vh 1vw; color: #61345f; }
+    .dessert-intro { text-align: center; position: relative; z-index: 2; }
+    .dessert-eyebrow { margin: 0; font-size: clamp(12px, 1.3vw, 28px); font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .dessert-intro h2 { font-size: clamp(36px, 5.6vw, 110px); font-weight: 400; line-height: 1; margin: .5vh 0; color: #963a73; text-shadow: 0 3px 0 #fff8; }
+    .dessert-intro > p:last-child { margin: 0; font-size: clamp(12px, 1.35vw, 28px); font-weight: 600; }
+    .dessert-grid { display: grid; grid-template-columns: repeat(var(--dessert-count, 3), minmax(0, 1fr)); gap: 2.2vw; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 2; }
+    .dessert-card { position: relative; border: max(3px, .3vw) solid #fff; border-radius: 2.6vw; padding: 1.3vh 1.2vw 1.8vh; background: #fff8efed; box-shadow: 0 1vh 0 #a35b8e16, 0 1.6vh 3vh #71345920; text-align: center; display: flex; align-items: center; flex-direction: column; }
+    .dessert-card:nth-child(2) { background: #fff0f7ed; }
+    .dessert-card:nth-child(3) { background: #f6efffed; }
+    .dessert-art { width: 100%; height: clamp(130px, 25vh, 600px); object-fit: contain; filter: drop-shadow(0 1vh .6vh #ab648123); }
+    .dessert-card h3 { font-size: clamp(17px, 2vw, 64px); line-height: 1.2; font-weight: 800; min-height: 2.4em; display: flex; align-items: center; justify-content: center; margin: .6vh 0 1vh; text-wrap: balance; }
+    .dessert-price { font-size: clamp(28px, 3.9vw, 120px); line-height: 1; font-weight: 900; color: #a72e67; margin-top: auto; }
+    .dessert-price small { font-size: .4em; }
+    .dessert-caption { font-size: clamp(10px, 1vw, 20px); font-weight: 700; margin: .8vh 0 0; color: #8a587e; }
+    .sweet-decor { position: absolute; width: clamp(45px, 6vw, 120px); height: auto; opacity: .65; pointer-events: none; animation: candyFloat 5s ease-in-out infinite; z-index: 0; }
+    .sweet-decor-left { left: -1%; top: -2%; transform: rotate(-18deg); }
+    .sweet-decor-right { right: 0; top: 3%; animation-delay: -2.5s; }
+    .sweet-sparkle { transform-origin: center; animation: sparkle 3s ease-in-out infinite; }
+    @keyframes candyFloat { 0%,100% { translate: 0 0; rotate: -12deg; } 50% { translate: 0 -10px; rotate: 12deg; } }
+    @keyframes sparkle { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+    @media (min-width: 2000px) { .dessert-grid { max-width: 86vw; } }
+    @media (max-aspect-ratio: 1/1) {
+      .dessert-page { padding: 0; gap: 2vh; }
+      .dessert-grid { grid-template-columns: 1fr; max-width: 500px; gap: 3vh; }
+      .dessert-card { border-radius: 24px; padding: 14px; }
+      .dessert-art { height: 22vh; }
+      .dessert-card h3 { min-height: 0; }
+      .dessert-intro h2 { font-size: 11vw; }
+      .plate-column { flex-basis: auto; }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; } }
   </style>
 </head>
 <body>
 
 <!-- LIENZO TV 16:9 ABSOLUTO Y LIMPIO -->
-<div class="tv-screen w-full h-screen tv-animated-bg relative overflow-hidden flex flex-col justify-between p-[2.2%] select-none">
+<div id="tvScreen" data-theme="gold" data-kind="dish" class="tv-screen w-full h-screen tv-animated-bg relative overflow-hidden flex flex-col justify-between p-[2.2%] select-none">
   <div class="tv-dots-overlay absolute inset-0 pointer-events-none"></div>
 
   <!-- HEADER -->
   <div class="tv-header relative z-10 flex items-center justify-between">
     <div class="bg-red-700 text-white px-5 py-2 rounded-full shadow-lg flex items-center gap-2 border-2 border-white">
-      <i class="fa-solid fa-fire-flame-curved text-amber-300 text-lg"></i>
-      <span class="font-extrabold uppercase tracking-wider text-[clamp(0.8rem,1.4vw,1.1rem)]">
+      <i id="headerIcon" class="fa-solid fa-fire-flame-curved text-amber-300 text-lg"></i>
+      <span id="headerLabel" class="font-extrabold uppercase tracking-wider text-[clamp(0.8rem,1.4vw,1.1rem)]">
           Comida Corrida • Hecha al Momento
         </span>
     </div>
@@ -164,23 +207,51 @@
   <!-- CONTENIDO CENTRAL -->
   <div id="tvSlideContent" class="relative z-10 flex-1 my-[1%] flex items-center justify-between gap-[3%]"></div>
 
-  <!-- FOOTER DE POSTRES -->
-  <div class="tv-footer relative z-10 bg-slate-950/85 backdrop-blur-md text-white rounded-xl px-5 py-2.5 flex flex-wrap items-center justify-between gap-2 border border-amber-400/30 shadow-lg">
+  <p id="screenSyncStatus" role="status" class="relative z-10 text-xs font-bold text-center"></p>
+  <!-- EXTRAS SALADOS: los postres tienen su propia diapositiva -->
+  <div id="extrasFooter" class="tv-footer relative z-10 bg-slate-950/85 backdrop-blur-md text-white rounded-xl px-5 py-2.5 flex flex-wrap items-center justify-between gap-2 border border-amber-400/30 shadow-lg">
     <div class="flex items-center gap-2 text-amber-400 font-extrabold uppercase text-[clamp(0.75rem,1.2vw,0.95rem)]">
-      <i class="fa-solid fa-ice-cream"></i>
-      <span>Postres y extras</span>
+      <i class="fa-solid fa-utensils"></i>
+      <span>Para acompañar</span>
     </div>
     <div id="tvDessertsBar" class="flex flex-wrap items-center gap-x-6 gap-y-1 text-[clamp(0.75rem,1.2vw,0.95rem)] font-bold"></div>
   </div>
 </div>
 
-<script src="menu-state.js"></script>
+<script src="menu-state.js?v=43e59bbda8a9"></script>
+<script src="firebase-sync.js?v=c67952c12182"></script>
 <script>
   let currentSlideIdx = 0;
 
   function getFallbackClaySvg(sauceColor = '#4d7c0f') {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><circle cx="150" cy="150" r="146" fill="#9a4819"/><circle cx="150" cy="150" r="132" fill="#7c3510"/><circle cx="150" cy="150" r="126" fill="#b45309"/><path d="M150 32 A118 118 0 0 1 264 150 L150 150 Z" fill="#ea580c"/><path d="M264 150 A118 118 0 0 1 150 264 L150 150 Z" fill="#1c1917"/><path d="M150 264 A118 118 0 0 1 150 32 L150 150 Z" fill="${sauceColor}"/></svg>`;
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg).replace(/'/g, '%27');
+  }
+
+  function dessertIllustration(id) {
+    const plate = '<ellipse cx="160" cy="205" rx="128" ry="28" fill="#e8c6d6"/><ellipse cx="160" cy="198" rx="128" ry="28" fill="#fff"/><ellipse cx="160" cy="198" rx="101" ry="18" fill="#fff1de"/>';
+    const art = {
+      platanos: `<g stroke="#ad5a21" stroke-width="3" stroke-linejoin="round">
+        <path d="M56 168Q120 91 255 140Q193 154 92 199Q61 201 56 168" fill="#efb550"/>
+        <path d="M65 150Q148 90 251 119Q181 130 103 179Q72 181 65 150" fill="#d99435"/>
+        <path d="M76 125Q157 83 240 100Q191 105 113 151Q81 157 76 125" fill="#f4be5a"/>
+      </g><g stroke="#fff4d5" stroke-width="9" stroke-linecap="round"><path d="M95 128l24 43m10-56l22 44m12-54l20 41m13-39l17 28"/></g><g fill="#a64f26"><ellipse cx="82" cy="160" rx="6" ry="3"/><ellipse cx="232" cy="120" rx="7" ry="3"/><ellipse cx="154" cy="179" rx="5" ry="3"/></g>`,
+      gelatina: `<path d="M79 178L97 100Q160 77 223 100L241 178Q232 210 160 210Q88 210 79 178" fill="#ed4f80" stroke="#c83668" stroke-width="3"/><ellipse cx="160" cy="101" rx="63" ry="20" fill="#ff92b2"/><ellipse cx="160" cy="100" rx="40" ry="10" fill="#ffb4cd"/><path d="M105 121l-9 54m34-46l-5 58m35-54v61m30-65l5 58m20-66l9 54" fill="none" stroke="#ffacc7" stroke-width="7" stroke-linecap="round"/><path d="M98 181Q158 209 223 183" stroke="#c83668" stroke-width="4" fill="none"/>`,
+      flan: `<ellipse cx="160" cy="197" rx="91" ry="19" fill="#aa572c"/><path d="M91 177l15-65Q160 95 214 112l15 65Q216 198 160 198Q104 198 91 177" fill="#ffda87" stroke="#c18c45" stroke-width="3"/><path d="M112 126l-7 45m27-39l-3 50m31-47v50m28-53l4 48m18-54l7 42" stroke="#ffe9b5" stroke-width="7" stroke-linecap="round"/><ellipse cx="160" cy="114" rx="55" ry="17" fill="#a34b27"/><ellipse cx="156" cy="110" rx="39" ry="9" fill="#d1823a"/><path d="M123 115q-6 27 4 25q8-3 4-23m51-1q-4 35 6 29q8-4 1-30" fill="#a34b27"/><circle cx="160" cy="87" r="12" fill="#e64961"/><path d="M160 76q0-16 13-20" stroke="#54894e" stroke-width="4" fill="none"/>`
+    };
+    return `<svg class="dessert-art" viewBox="0 0 320 240" role="img" aria-label="Ilustración de ${id === 'platanos' ? 'plátanos fritos con lechera' : id === 'flan' ? 'flan de leche' : 'gelatina'}">${plate}${art[id]}<g class="sweet-sparkle" fill="#d79cce"><path d="M54 65l5 12 12 5-12 5-5 12-5-12-12-5 12-5z"/><path d="M267 55l4 9 9 4-9 4-4 9-4-9-9-4 9-4z"/></g></svg>`;
+  }
+
+  function renderDesserts(desserts) {
+    const candy = `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M30 40L7 23v50l23-15m40-18l23-17v50L70 58" fill="#ed86ae"/><rect x="25" y="25" width="50" height="50" rx="18" fill="#fff1c9" stroke="#fff" stroke-width="3"/><path d="M39 28l22 44M28 39l13 28m18-37l13 26" stroke="#c19ae8" stroke-width="9"/></svg>`;
+    return `<section class="dessert-page anim-slide-title" aria-label="Postres disponibles">
+      <div class="sweet-decor sweet-decor-left">${candy}</div><div class="sweet-decor sweet-decor-right">${candy}</div>
+      <header class="dessert-intro"><p class="dessert-eyebrow">Siempre hay lugar para algo dulce</p><h2 class="font-display">¡El final más dulce!</h2><p>Elige tu postre favorito</p></header>
+      <div class="dessert-grid" style="--dessert-count:${desserts.length}">${desserts.map(item => {
+        const price = Number(item.price).toFixed(2).split('.');
+        return `<article class="dessert-card">${dessertIllustration(item.id)}<h3>${item.name}</h3><div class="dessert-price font-price">$${price[0]}<small>.${price[1]}</small></div><p class="dessert-caption">Un antojito para sonreír</p></article>`;
+      }).join('')}</div>
+    </section>`;
   }
 
   function renderTvSlide() {
@@ -193,24 +264,31 @@
     const activeWaters = menuState.waters.filter(w => w.active);
     const activeDesserts = menuState.desserts.filter(d => d.active);
 
-    document.getElementById('tvDessertsBar').innerHTML = activeDesserts.length
-            ? activeDesserts.map(d => `<span>${d.name} <strong class="text-amber-400">$${d.price}</strong></span>`).join('<span class="text-slate-600">•</span>')
-            : '<span class="text-slate-400">Pregunta por nuestros postres del día</span>';
-
+    const desserts = activeDesserts.filter(item => ['platanos', 'gelatina', 'flan'].includes(item.id));
+    const extras = activeDesserts.filter(item => !['platanos', 'gelatina', 'flan'].includes(item.id));
+    const totalSlides = activeDishes.length + (desserts.length ? 1 : 0);
     const stage = document.getElementById('tvSlideContent');
     const dotsContainer = document.getElementById('slideDots');
-
-    if (activeDishes.length === 0) {
-      dotsContainer.innerHTML = '';
-      stage.innerHTML = `<div class="w-full text-center bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border-4 border-red-600"><h2 class="text-3xl font-black text-slate-900">¡Gracias por su preferencia!</h2><p class="text-slate-600 font-semibold mt-1">Esperando platillos activos...</p></div>`;
+    if (currentSlideIdx >= totalSlides) currentSlideIdx = 0;
+    const isDessert = desserts.length > 0 && currentSlideIdx === activeDishes.length;
+    const screen = document.getElementById('tvScreen');
+    screen.dataset.theme = isDessert ? 'sweets' : currentSlideIdx % 2 ? 'sunset' : 'gold';
+    screen.dataset.kind = isDessert ? 'desserts' : 'dish';
+    document.getElementById('headerLabel').textContent = isDessert ? 'Un dulce final • Hecho con cariño' : 'Comida Corrida • Hecha al Momento';
+    document.getElementById('headerIcon').className = `fa-solid ${isDessert ? 'fa-heart' : 'fa-fire-flame-curved'} text-amber-300 text-lg`;
+    document.getElementById('extrasFooter').hidden = isDessert || !extras.length;
+    document.getElementById('tvDessertsBar').innerHTML = extras.map(d => `<span>${d.name} <strong class="text-amber-400">$${Number(d.price).toFixed(2)}</strong></span>`).join('<span>•</span>');
+    dotsContainer.innerHTML = Array.from({length:totalSlides}, (_, idx) => `
+      <button type="button" onclick="goToSlide(${idx})" aria-label="${idx === activeDishes.length && desserts.length ? 'Ver postres' : 'Ver guisado ' + (idx + 1)}" aria-pressed="${idx === currentSlideIdx}" class="slide-dot ${idx === currentSlideIdx ? 'selected' : ''}"></button>
+    `).join('');
+    if (isDessert) {
+      stage.innerHTML = renderDesserts(desserts);
       return;
     }
-
-    if (currentSlideIdx >= activeDishes.length) currentSlideIdx = 0;
-
-    dotsContainer.innerHTML = activeDishes.map((_, idx) => `
-        <span class="h-2 rounded-full transition-all duration-300 ${idx === currentSlideIdx ? 'w-6 bg-red-600' : 'w-2 bg-white/60'}"></span>
-      `).join('');
+    if (!activeDishes.length) {
+      stage.innerHTML = `<div class="w-full text-center bg-white/95 rounded-3xl p-8 shadow-2xl"><h2 class="text-3xl font-black">¡Gracias por su preferencia!</h2><p>Esperando platillos activos...</p></div>`;
+      return;
+    }
 
     const dish = activeDishes[currentSlideIdx];
 
@@ -225,12 +303,12 @@
     const plateColumn = `
       <div class="plate-column anim-pop-plate">
         <div class="fresh-tag"><i class="fa-solid fa-fire text-red-600"></i> RECIÉN SERVIDO</div>
-        <div class="steam"><div class="steam-particle steam-1"></div><div class="steam-particle steam-2"></div><div class="steam-particle steam-3"></div></div>
+        <div class="steam" aria-hidden="true"><div class="steam-particle steam-1"></div><div class="steam-particle steam-2"></div><div class="steam-particle steam-3"></div><div class="steam-particle steam-4"></div></div>
         <div class="clay-plate-wrapper"><img src="${dishImage || fallbackSvg}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" /></div>
         <div class="price-card anim-bounce-price">
           <div class="price-label">${dish.packageItems ? 'Paquete completo' : 'Comer aquí'}</div>
-          <div class="price-value font-price">$${dish.price}<small>.00</small></div>
-          ${dish.takeoutPrice != null ? `<div class="takeout font-price"><i class="fa-solid fa-bag-shopping"></i> Para llevar: $${dish.takeoutPrice}.00</div>` : ''}
+          <div class="price-value font-price">$${Number(dish.price).toFixed(2).split('.')[0]}<small>.${Number(dish.price).toFixed(2).split('.')[1]}</small></div>
+          ${dish.takeoutPrice != null ? `<div class="takeout font-price"><i class="fa-solid fa-bag-shopping"></i> Para llevar: $${Number(dish.takeoutPrice).toFixed(2)}</div>` : ''}
         </div>
       </div>`;
 
@@ -256,10 +334,12 @@
     stage.innerHTML = plateColumn + infoColumn;
   }
 
+  function goToSlide(index) { currentSlideIdx = index; renderTvSlide(); }
+
   function nextSlide() {
     const menuState = FondaMenu.load();
     if (!menuState) return;
-    const activeCount = menuState.dishes.filter(d => d.active).length;
+    const activeCount = menuState.dishes.filter(d => d.active).length + (menuState.desserts.some(d => d.active && ['platanos', 'gelatina', 'flan'].includes(d.id)) ? 1 : 0);
     if (activeCount > 0) {
       currentSlideIdx = (currentSlideIdx + 1) % activeCount;
       renderTvSlide();
@@ -270,8 +350,22 @@
   setInterval(nextSlide, 7000);
 
   // Escucha cambios si desde admin.html actualizan algo en otra pestaña
-  window.addEventListener('storage', () => { renderTvSlide(); });
+  window.addEventListener('storage', event => {
+    if (event.key === 'fonda_menu_state_v1' || event.key === null) {
+      currentSlideIdx = 0;
+      renderTvSlide();
+    }
+  });
+  window.addEventListener('focus', renderTvSlide);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) renderTvSlide();
+  });
 
+  window.addEventListener('fonda-menu-updated', () => { currentSlideIdx = 0; renderTvSlide(); });
+  window.addEventListener('fonda-cloud-status', () => {
+    const info = FondaCloud.info;
+    document.getElementById('screenSyncStatus').textContent = info.error ? 'Sin conexión al menú compartido' : info.connected ? (info.empty ? 'Esperando publicación del menú' : '') : 'Reconectando…';
+  });
   renderTvSlide();
 </script>
 </body>
