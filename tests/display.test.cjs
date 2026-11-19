@@ -10,6 +10,7 @@ vm.runInContext(`goToSlide(${count})`,ctx);
 let html=nodes.tvSlideContent.innerHTML;
 assert.equal(nodes.tvScreen.dataset.theme,'sweets');assert.equal((html.match(/class="dessert-card"/g)||[]).length,3);
 for(const name of ['Plátanos fritos con lechera','Gelatina','Flan de leche'])assert(html.includes(name));
+for(const photo of ['platanosfritos.png','gelatina.png','flandeleche.png']) {assert(html.includes(`src="img/${photo}"`));assert(fs.existsSync('img/'+photo));}
 assert(html.includes('$35<small>.00'));assert(html.includes('$20<small>.00'));
 assert.equal(nodes.extrasFooter.hidden,true);assert(!html.includes('steam-particle'));
 vm.runInContext('nextSlide()',ctx);assert.equal(nodes.tvScreen.dataset.theme,'gold');

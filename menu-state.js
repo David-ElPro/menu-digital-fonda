@@ -995,21 +995,21 @@
       "name": "Plátanos fritos con lechera",
       "price": 35,
       "active": true,
-      "img": ""
+      "img": "img/platanosfritos.png"
     },
     {
       "id": "gelatina",
       "name": "Gelatina",
       "price": 20,
       "active": true,
-      "img": ""
+      "img": "img/gelatina.png"
     },
     {
       "id": "flan",
       "name": "Flan de leche",
       "price": 20,
       "active": true,
-      "img": ""
+      "img": "img/flandeleche.png"
     },
     {
       "id": "papas",

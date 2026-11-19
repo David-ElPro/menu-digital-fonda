@@ -218,7 +218,7 @@
   </div>
 </div>
 
-<script src="menu-state.js?v=43e59bbda8a9"></script>
+<script src="menu-state.js?v=15971fdd9e40"></script>
 <script src="firebase-sync.js?v=c67952c12182"></script>
 <script>
   let currentSlideIdx = 0;
@@ -249,7 +249,7 @@
       <header class="dessert-intro"><p class="dessert-eyebrow">Siempre hay lugar para algo dulce</p><h2 class="font-display">¡El final más dulce!</h2><p>Elige tu postre favorito</p></header>
       <div class="dessert-grid" style="--dessert-count:${desserts.length}">${desserts.map(item => {
         const price = Number(item.price).toFixed(2).split('.');
-        return `<article class="dessert-card">${dessertIllustration(item.id)}<h3>${item.name}</h3><div class="dessert-price font-price">$${price[0]}<small>.${price[1]}</small></div><p class="dessert-caption">Un antojito para sonreír</p></article>`;
+        return `<article class="dessert-card">${item.img ? `<img class="dessert-art" src="${item.img}" alt="${item.name}" onerror="this.hidden=true;this.nextElementSibling.hidden=false;"><div hidden>${dessertIllustration(item.id)}</div>` : dessertIllustration(item.id)}<h3>${item.name}</h3><div class="dessert-price font-price">$${price[0]}<small>.${price[1]}</small></div><p class="dessert-caption">Un antojito para sonreír</p></article>`;
       }).join('')}</div>
     </section>`;
   }
