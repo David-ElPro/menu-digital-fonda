@@ -178,3 +178,11 @@ Las medidas de los elementos se revisaron en navegador: no hubo desbordamiento h
 Después de publicar, recargar la página en la TV. Si el navegador conserva una versión anterior, cerrar la pestaña y volver a abrirla. La distribución se adapta al área disponible, incluidas las barras del navegador. El modo de pantalla completa permite aprovechar más superficie, cuando el navegador lo ofrece.
 
 Fuentes: [resolución de aplicaciones Samsung](https://developer.samsung.com/smarttv/develop/guides/fundamentals/managing-screen-resolution.html), [compatibilidad del navegador de TV Samsung](https://help.dsp.samsungads.com/website-rendering-on-samsung-tvs), [tamaños y familias de TV LG](https://www.lg.com/uk/buying-guides/tv-lineup-guide/lgsubscribe-buy/).
+
+## Sincronización de televisores antiguos
+
+`tv-sync.js` añade a la pantalla pública una lectura REST de `menus/principal` cada 10 segundos, independiente del SDK moderno de Firebase. Usa XMLHttpRequest y sintaxis ES5. No tiene funciones de escritura ni credenciales de administrador. Sigue sujeta a las reglas de lectura de Firestore.
+
+Solo actualiza la pantalla si cambió el contenido y descarta una respuesta que quedó atrasada respecto de una actualización del SDK. Los errores conservan el último menú y espacian los reintentos hasta 60 segundos. Volver a la pestaña o recuperar internet dispara una consulta. El tiempo normal de actualización por esta vía es de unos 10 segundos más la respuesta de red; no es una conexión instantánea. No requiere recargar toda la página para cada cambio.
+
+Se verificó que la lectura pública del documento publicado responde HTTP 200. `node tests/tv-sync.test.cjs` prueba el funcionamiento sin SDK, respuestas repetidas, errores de red, permisos, recuperación y respuestas atrasadas. Falta verificar esta vía en el televisor físico tras publicar Hosting y recargar su pestaña. Cada pantalla abierta realiza lecturas periódicas de Firestore.
