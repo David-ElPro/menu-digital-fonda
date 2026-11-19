@@ -70,7 +70,7 @@
     catch (error) { throw new Error(errorText(error)); }
   }
   async function publish(changes, initial) {
-    if (!info.authorized) throw new Error('Inicia sesión con una de las dos cuentas autorizadas.');
+    if (!info.authorized) throw new Error('Inicia sesión con una cuenta autorizada.');
     if (!info.ready || !info.connected || !navigator.onLine) throw new Error('No hay conexión con Firebase. Los cambios siguen pendientes.');
     if (info.saving) throw new Error('Ya se están guardando los cambios.');
     info.saving = true; announce();

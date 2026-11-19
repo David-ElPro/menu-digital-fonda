@@ -11,7 +11,7 @@ El objetivo es mantener visible la oferta de comida corrida y retirar rápidamen
 | `index.html` | Pantalla pública con carrusel de guisados, precios, acompañamientos, entradas, aguas y postres. |
 | `admin.html` | Panel de control con diseño adaptable a celular para administrar la disponibilidad del menú. |
 | `firebase-sync.js` | Inicio de sesión y sincronización del menú con Firestore. |
-| `firestore.rules` | Lectura pública del menú y escritura limitada a los dos UID autorizados. |
+| `firestore.rules` | Lectura pública del menú y escritura limitada a los UID autorizados. |
 | `menu-state.js` | Catálogo inicial y lectura/escritura compartida del estado local. |
 | `img/` | Fotografías de alimentos utilizadas o disponibles para el catálogo. |
 | `firebase.json` | Configuración para publicar los archivos estáticos con Firebase Hosting. |
@@ -84,8 +84,9 @@ El panel requiere inicio de sesión con correo y contraseña de Firebase Authent
 
 - Cuenta de pruebas: `cI41h5DZGURJgjNAkhBK5SEfLL33`.
 - Cuenta del papá: `tNm9qnzrcicgyc4Oj6rmcdlAIE83`.
+- Cuenta adicional: `uII1zdgYFjVldt9z6CmgOr6V8El2`.
 
-Ambas cuentas tienen los mismos permisos. No se guardan contraseñas en el repositorio. La configuración web de Firebase y los UID no son secretos: las restricciones de escritura se aplican en `firestore.rules` en el servidor.
+Las tres cuentas tienen los mismos permisos. No se guardan contraseñas en el repositorio. La configuración web de Firebase y los UID no son secretos: las restricciones de escritura se aplican en `firestore.rules` en el servidor.
 
 Los cambios del panel son borradores hasta confirmar **Guardar y aplicar**. Una transacción lee el menú compartido más reciente y aplica los campos editados, conservando los demás cambios. Si dos administradores editan el mismo campo, prevalece la última confirmación. Las actualizaciones recibidas mientras se edita no descartan el borrador. No se anuncia éxito hasta que Firebase confirma el guardado; sin conexión o permisos, los cambios permanecen pendientes.
 
@@ -154,3 +155,5 @@ Los scripts compartidos se cargan con una versión basada en su contenido para e
 Prueba adicional: `node tests/display.test.cjs` comprueba la rotación de los fondos, la diapositiva de tres postres, disponibilidad, precios editados y el estado vacío. Se revisó la geometría del vapor y del precio en navegador a 1920×1080 y 3840×2160: sin intersección ni desbordamiento horizontal.
 
 La presentación de guisados utiliza tarjetas crema, títulos con palabras de color según la salsa y entrada escalonada, fotografías grandes para entradas y aguas, ondas orgánicas de fondo y destellos animados. El precio tiene un pulso suave. Las animaciones respetan `prefers-reduced-motion`; no alteran los precios ni las selecciones guardadas.
+
+Para agregar administradores, actualizar el UID tanto en `firebase-sync.js` como en `firestore.rules`, renovar la versión del script en ambos HTML y desplegar Hosting y reglas. `node tests/cloud.test.cjs` comprueba que las dos listas coincidan.

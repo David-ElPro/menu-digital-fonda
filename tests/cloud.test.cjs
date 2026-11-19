@@ -2,6 +2,9 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const shared=fs.readFileSync('menu-state.js','utf8');
 const sync=fs.readFileSync('firebase-sync.js','utf8').replace(/import\('https:\/\/www\.gstatic\.com\/firebasejs\/13\.4\.0\/firebase-(app|auth|firestore)\.js'\)/g, (_,name)=>`Promise.resolve(modules.${name})`);
+const clientUIDs=fs.readFileSync('firebase-sync.js','utf8').match(/ADMIN_UIDS = \[(.*?)\]/s)[1].match(/'([^']+)'/g).map(x=>x.slice(1,-1));
+const rulesUIDs=fs.readFileSync('firestore.rules','utf8').match(/request.auth.uid in \[(.*?)\]/s)[1].match(/'([^']+)'/g).map(x=>x.slice(1,-1));
+assert.deepEqual(clientUIDs.sort(), rulesUIDs.sort(), 'Los UID del panel y las reglas deben coincidir');
 let remote=null, deny=false; const listeners=[];
 const snapshot=()=>({metadata:{hasPendingWrites:false,fromCache:false},exists:()=>!!remote,data:()=>structuredClone(remote)});
 function device(uid) {
@@ -17,11 +20,11 @@ function device(uid) {
  ctx.window=ctx;vm.createContext(ctx);vm.runInContext(shared,ctx);vm.runInContext(sync,ctx);
  return {ctx,cache,events};
 }
-const me=device('cI41h5DZGURJgjNAkhBK5SEfLL33'),dad=device('tNm9qnzrcicgyc4Oj6rmcdlAIE83'),tv=device('other');
+const me=device('cI41h5DZGURJgjNAkhBK5SEfLL33'),dad=device('tNm9qnzrcicgyc4Oj6rmcdlAIE83'),third=device('uII1zdgYFjVldt9z6CmgOr6V8El2'),tv=device('other');
 await new Promise(resolve=>setImmediate(resolve));
 assert(me.ctx.FondaCloud.info.empty);assert(tv.ctx.FondaCloud.info.ready);
-await assert.rejects(()=>tv.ctx.FondaCloud.publish([],tv.ctx.FondaMenu.load()),/autorizadas/);
-for(const d of [me,dad]){await d.ctx.FondaCloud.login('admin@example.test','test');assert(d.ctx.FondaCloud.info.authorized);}
+await assert.rejects(()=>tv.ctx.FondaCloud.publish([],tv.ctx.FondaMenu.load()),/autorizada/);
+for(const d of [me,dad,third]){await d.ctx.FondaCloud.login('admin@example.test','test');assert(d.ctx.FondaCloud.info.authorized);}
 await me.ctx.FondaCloud.publish([],me.ctx.FondaMenu.load());
 assert(!tv.ctx.FondaCloud.info.empty);
 await dad.ctx.FondaCloud.publish([{key:'dishes',id:'pozole_pollo',field:'active',value:true},{key:'dishes',id:'pozole_pollo',field:'price',value:110}],dad.ctx.FondaMenu.load());
@@ -29,14 +32,14 @@ assert(tv.ctx.FondaMenu.load().dishes.find(d=>d.id==='pozole_pollo').active);
 await me.ctx.FondaCloud.publish([{key:'dishes',id:'puerco_verde',field:'active',value:false}],me.ctx.FondaMenu.load());
 assert(!tv.ctx.FondaMenu.load().dishes.find(d=>d.id==='puerco_verde').active);
 assert(tv.ctx.FondaMenu.load().dishes.find(d=>d.id==='pozole_pollo').active);
-console.log('OK: dos UID autorizados, pantalla sin sesión y almacenamiento separado por dispositivo');
+console.log('OK: tres UID autorizados, pantalla sin sesión y almacenamiento separado por dispositivo');
 me.ctx.navigator.onLine=false;
 await assert.rejects(()=>me.ctx.FondaCloud.publish([],me.ctx.FondaMenu.load()),/conexión/);me.ctx.navigator.onLine=true;
 deny=true;const before=JSON.stringify(remote);
 await assert.rejects(()=>me.ctx.FondaCloud.publish([{key:'dishes',id:'pozole_pollo',field:'price',value:1}],me.ctx.FondaMenu.load()),/reglas/);
 assert.equal(JSON.stringify(remote),before);assert(!me.ctx.FondaCloud.info.saving);deny=false;
 await tv.ctx.FondaCloud.login('other@example.test','test');assert(!tv.ctx.FondaCloud.info.authorized);
-await assert.rejects(()=>tv.ctx.FondaCloud.publish([],tv.ctx.FondaMenu.load()),/autorizadas/);
+await assert.rejects(()=>tv.ctx.FondaCloud.publish([],tv.ctx.FondaMenu.load()),/autorizada/);
 console.log('OK: sin red o sin permisos no publica, y no anuncia éxito antes de confirmar');
 await assert.rejects(()=>me.ctx.FondaCloud.publish([{key:'dishes',id:'pozole_pollo',field:'price',value:-10}],me.ctx.FondaMenu.load()),/Precio inválido/);
 await me.ctx.FondaCloud.logout();assert(!me.ctx.FondaCloud.info.authorized);

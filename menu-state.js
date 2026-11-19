@@ -167,7 +167,7 @@
       "takeoutPrice": 100,
       "active": false,
       "sides": "Arroz, frijoles o ambos • Incluye 1L de agua y tortillas",
-      "img": "",
+      "img": "img/entomatadoderes.png",
       "sauceColor": "#4d7c0f",
       "variants": [
         {
@@ -277,7 +277,7 @@
       "takeoutPrice": 100,
       "active": false,
       "sides": "Arroz, frijoles o ambos • Incluye 1L de agua y tortillas",
-      "img": "",
+      "img": "img/puercoenguajillo.png",
       "sauceColor": "#9a3412",
       "variants": [],
       "selectedVariant": "",
@@ -291,7 +291,7 @@
       "takeoutPrice": 100,
       "active": false,
       "sides": "Arroz, frijoles o ambos • Incluye 1L de agua y tortillas",
-      "img": "",
+      "img": "img/puerchoenchileancho.png",
       "sauceColor": "#9a3412",
       "variants": [
         {
@@ -329,7 +329,7 @@
       "takeoutPrice": 100,
       "active": false,
       "sides": "Arroz, frijoles o ambos • Incluye 1L de agua y tortillas",
-      "img": "",
+      "img": "img/moleverdeconpuerco.png",
       "sauceColor": "#4d7c0f",
       "variants": [],
       "selectedVariant": "",

@@ -33,7 +33,7 @@
   <p id="cloudStatus" role="status" aria-live="polite" class="text-sm font-bold mb-3">Conectando con Firebase…</p>
   <form id="loginForm" onsubmit="loginAdmin(event)" class="bg-white rounded-2xl p-5 border space-y-3">
     <h2 class="font-extrabold text-lg">Entrar al panel</h2>
-    <p class="text-sm text-slate-500">Usa tu cuenta o la de tu papá.</p>
+    <p class="text-sm text-slate-500">Usa una cuenta autorizada para administrar el menú.</p>
     <label class="block text-sm">Correo<input id="loginEmail" type="email" autocomplete="username" required class="block w-full border rounded-lg p-2 mt-1"></label>
     <label class="block text-sm">Contraseña<input id="loginPassword" type="password" autocomplete="current-password" required class="block w-full border rounded-lg p-2 mt-1"></label>
     <button id="loginButton" type="submit" class="bg-slate-900 text-white rounded-xl px-4 py-2 font-bold">Iniciar sesión</button>
@@ -113,8 +113,8 @@
   </div>
 </dialog>
 
-<script src="menu-state.js?v=15971fdd9e40"></script>
-<script src="firebase-sync.js?v=c67952c12182"></script>
+<script src="menu-state.js?v=a21ac1fe0e6c"></script>
+<script src="firebase-sync.js?v=a9241fdd685a"></script>
 <script>
     let publishing = false;
     let menuState = FondaMenu.load();
