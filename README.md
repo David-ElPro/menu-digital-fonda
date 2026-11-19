@@ -10,6 +10,7 @@ El objetivo es mantener visible la oferta de comida corrida y retirar rápidamen
 | --- | --- |
 | `index.html` | Pantalla pública con carrusel de guisados, precios, acompañamientos, entradas, aguas y postres. |
 | `admin.html` | Panel de control con diseño adaptable a celular para administrar la disponibilidad del menú. |
+| `menu-state.js` | Catálogo inicial y lectura/escritura compartida del estado local. |
 | `img/` | Fotografías de alimentos utilizadas o disponibles para el catálogo. |
 | `firebase.json` | Configuración para publicar los archivos estáticos con Firebase Hosting. |
 | `.firebaserc` | Asociación del proyecto local con Firebase. |
@@ -43,7 +44,7 @@ El panel no ofrece formularios para crear platillos, subir fotografías o editar
 
 ## Catálogo inicial
 
-El catálogo se define en `DEFAULT_STATE`, dentro de `admin.html`:
+El catálogo se define en `DEFAULT_STATE`, dentro de `menu-state.js`:
 
 - **8 guisados:** puerco en salsa verde, morita, cacahuate, adobo, jitomate y árbol; filete de pescado empanizado; arrachera asada.
 - **4 entradas:** sopa de pasta, arroz rojo, sopa de habas y lentejas.
@@ -68,13 +69,13 @@ Se necesita un navegador moderno con JavaScript y almacenamiento local habilitad
    ```
 
 3. Abre el panel en `http://localhost:8000/admin.html`.
-4. Haz un cambio, por ejemplo desactiva y vuelve a activar un postre. Esto guarda el estado inicial.
+4. El catálogo inicial se carga y guarda automáticamente si no existe un menú local válido.
 5. Pulsa **Ver TV** para abrir `http://localhost:8000/index.html` en otra pestaña del mismo navegador y perfil.
 6. Coloca esa pestaña en la pantalla de exhibición y activa la pantalla completa del navegador si lo deseas.
 
 Puedes utilizar otro servidor de archivos estáticos. Mantén ambas páginas en el mismo origen: protocolo, host y puerto.
 
-**Detalle de la primera ejecución:** el panel carga el catálogo predeterminado en memoria, pero solo lo escribe en el almacenamiento al hacer un cambio. Si se abre primero `index.html` sin datos guardados, el área central queda sin contenido de guisados.
+**Primera ejecución:** tanto la pantalla como el panel cargan el catálogo inicial automáticamente. Si el almacenamiento está bloqueado, pueden utilizar ese catálogo en memoria; las selecciones no persistirán.
 
 ## Persistencia y sincronización
 
@@ -94,7 +95,7 @@ Firebase se utiliza como alojamiento estático; el código no integra Firestore,
 
 ## Personalizar el menú
 
-Edita `DEFAULT_STATE` en `admin.html` para cambiar el catálogo inicial:
+Edita `DEFAULT_STATE` en `menu-state.js` para cambiar el catálogo inicial:
 
 - `name`: nombre visible.
 - `active`: disponibilidad inicial.
@@ -124,7 +125,7 @@ Los cambios en `DEFAULT_STATE` no reemplazan un menú que ya esté guardado en e
 - Las dependencias visuales externas impiden considerar esta versión completamente autónoma sin conexión.
 - Las variantes de puerco en salsa verde apuntan a archivos `.jpg`, pero las fotografías correspondientes en `img/` tienen extensión `.png`.
 - Las fotografías `img/filetepescado.jpg` e `img/arrachera.jpg`, referenciadas en el catálogo, no están en el proyecto.
-- La lectura del estado no maneja JSON dañado ni valida su estructura.
+- La lectura recupera el catálogo inicial si el JSON está dañado o faltan las listas principales; la validación no comprueba cada campo del catálogo.
 - El panel no escucha cambios de otras pestañas de administración; trabajar con varios paneles abiertos puede sobrescribir selecciones.
 
 Este repositorio corresponde a un exhibidor de menú con control local de disponibilidad. Para operar desde un celular independiente de la pantalla se necesita añadir persistencia y sincronización compartidas.

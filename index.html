@@ -170,6 +170,7 @@
   </div>
 </div>
 
+<script src="menu-state.js"></script>
 <script>
   let currentSlideIdx = 0;
 
@@ -180,7 +181,7 @@
 
   function renderTvSlide() {
     // Lee los datos guardados en localStorage (sincronizado con admin.html)
-    const menuState = JSON.parse(localStorage.getItem('fonda_menu_state_v1'));
+    const menuState = FondaMenu.load();
     if (!menuState) return;
 
     const activeDishes = menuState.dishes.filter(d => d.active);
@@ -252,7 +253,7 @@
   }
 
   function nextSlide() {
-    const menuState = JSON.parse(localStorage.getItem('fonda_menu_state_v1'));
+    const menuState = FondaMenu.load();
     if (!menuState) return;
     const activeCount = menuState.dishes.filter(d => d.active).length;
     if (activeCount > 0) {
