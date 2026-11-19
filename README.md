@@ -42,20 +42,15 @@ El diseño de exhibición está orientado a una pantalla horizontal y utiliza to
 
 El panel no ofrece formularios para crear platillos, subir fotografías o editar precios. Esos cambios se realizan en el código.
 
-## Catálogo inicial
+## Catálogo y paquetes
 
-El catálogo se define en `DEFAULT_STATE`, dentro de `menu-state.js`:
+El catálogo de `menu-state.js` incluye 53 platillos de Puerco, Res, Pollo, Antojitos, Caldos, Especiales y Paquetes, además de 4 entradas, 5 aguas y 4 postres o extras. Los nuevos platillos inician desactivados; al actualizar se conservan las activaciones y variantes válidas guardadas por el usuario. Las fotografías y datos del catálogo se actualizan automáticamente sin borrar el almacenamiento.
 
-- **8 guisados:** puerco en salsa verde, morita, cacahuate, adobo, jitomate y árbol; filete de pescado empanizado; arrachera asada.
-- **4 entradas:** sopa de pasta, arroz rojo, sopa de habas y lentejas.
-- **5 aguas:** jamaica, naranja, guayaba, tamarindo y limón.
-- **4 postres y extras:** plátanos fritos con lechera, gelatina, flan de leche y papas a la francesa.
+Los guisados regulares cuestan $95 para comer aquí y $100 para llevar; el filete empanizado, $100 en ambas modalidades; arrachera y cecina, $150 para comer aquí. La arrachera conserva su precio anterior de $150 para llevar; la cecina no muestra precio para llevar porque no se especificó.
 
-Inicialmente están activos los primeros cuatro guisados, sopa de pasta, arroz rojo, jamaica, naranja y los cuatro postres o extras. El puerco en salsa verde inicia con la variante **Con Nopales**.
+**Pozole de pollo y de puerco:** activar cualquiera muestra su paquete de $110 con fotografía del pozole, orden de tacos dorados y 1L de agua. La tarjeta de tacos sustituye las entradas de sopa únicamente en esa diapositiva. No se indica precio para llevar del paquete porque no está definido.
 
-Los guisados de puerco tienen precios iniciales de **$95 para comer aquí** y **$100 para llevar**; el pescado, **$100** en ambas modalidades; la arrachera, **$150** en ambas. La moneda no se identifica explícitamente en el código.
-
-El filtro también incluye Res, Pollo, Antojitos y Caldos, aunque el catálogo inicial no contiene guisados en esas categorías. La carpeta de imágenes incluye fotografías adicionales que todavía no están incorporadas al catálogo.
+Las sopas y aguas usan las fotos disponibles en `img/`. Naranja y los alimentos sin fotografía utilizan una representación de respaldo. Los postres permanecen en la barra inferior con sus precios. Pancita y mojarra tienen archivos disponibles pero no se añadieron al catálogo porque no se proporcionaron sus precios ni acompañamientos.
 
 ## Cómo ejecutarlo localmente
 
@@ -105,7 +100,7 @@ Edita `DEFAULT_STATE` en `menu-state.js` para cambiar el catálogo inicial:
 - `variants` y `selectedVariant`: variantes disponibles y opción seleccionada.
 - `color` o `sauceColor`: color de identificación o de la ilustración de respaldo.
 
-Los cambios en `DEFAULT_STATE` no reemplazan un menú que ya esté guardado en ese navegador. Para volver al catálogo predeterminado, elimina la clave `fonda_menu_state_v1` desde las herramientas de desarrollo del navegador, recarga el panel y realiza un cambio para guardarlo. Esta operación descarta la selección local existente.
+Los datos del catálogo en `DEFAULT_STATE` se combinan con el menú guardado, conservando disponibilidad y variantes válidas. Los artículos nuevos se incorporan automáticamente. Para volver al catálogo predeterminado, elimina la clave `fonda_menu_state_v1` desde las herramientas de desarrollo del navegador, recarga el panel y realiza un cambio para guardarlo. Esta operación descarta la selección local existente.
 
 ## Tecnologías y publicación
 
@@ -123,9 +118,7 @@ Los cambios en `DEFAULT_STATE` no reemplazan un menú que ya esté guardado en e
 - No hay sincronización entre dispositivos, acceso con contraseña ni administración remota compartida.
 - No se implementan pedidos, pagos, inventario por cantidades ni historial de ventas.
 - Las dependencias visuales externas impiden considerar esta versión completamente autónoma sin conexión.
-- Las variantes de puerco en salsa verde apuntan a archivos `.jpg`, pero las fotografías correspondientes en `img/` tienen extensión `.png`.
-- Las fotografías `img/filetepescado.jpg` e `img/arrachera.jpg`, referenciadas en el catálogo, no están en el proyecto.
 - La lectura recupera el catálogo inicial si el JSON está dañado o faltan las listas principales; la validación no comprueba cada campo del catálogo.
-- El panel no escucha cambios de otras pestañas de administración; trabajar con varios paneles abiertos puede sobrescribir selecciones.
+- Pantalla y panel escuchan cambios de almacenamiento entre pestañas del mismo origen; no hay sincronización entre dispositivos.
 
 Este repositorio corresponde a un exhibidor de menú con control local de disponibilidad. Para operar desde un celular independiente de la pantalla se necesita añadir persistencia y sincronización compartidas.

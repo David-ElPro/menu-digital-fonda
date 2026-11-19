@@ -132,6 +132,10 @@
     .option-list { display: flex; justify-content: space-evenly; gap: .5vw; margin-top: 1vh; }
     .menu-option { flex: 1; min-width: 0; font-size: clamp(9px, 1.2vw, 23px); font-weight: 800; line-height: 1.2; }
     .option-icon { display: flex; align-items: center; justify-content: center; width: 5vw; height: 5vw; margin: 0 auto .7vh; border-radius: 50%; border: .5vw solid white; outline: 1px solid #eedfc0; background: var(--option-color); color: #fff5ce; font-size: 2.5vw; box-shadow: 0 .2vw .4vw #0002; }
+    .option-icon { overflow: hidden; }
+    .option-icon img { width: 100%; height: 100%; object-fit: contain; background: #fffaf0; }
+    .option-icon [hidden] { display: none; }
+    .option-card:has(.menu-option:only-child) .option-icon { width: 7vw; height: 7vw; }
     .tv-footer { flex: 0 0 auto; border-radius: 99px; padding: .35vh 1vw; gap: 1vw; flex-wrap: nowrap; }
     .tv-footer > div:first-child { font-size: clamp(9px, 1.1vw, 21px); white-space: nowrap; }
     #tvDessertsBar { flex: 1; justify-content: center; gap: .5vw; font-size: clamp(9px, 1.1vw, 21px); line-height: 1.4; }
@@ -176,7 +180,7 @@
 
   function getFallbackClaySvg(sauceColor = '#4d7c0f') {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><circle cx="150" cy="150" r="146" fill="#9a4819"/><circle cx="150" cy="150" r="132" fill="#7c3510"/><circle cx="150" cy="150" r="126" fill="#b45309"/><path d="M150 32 A118 118 0 0 1 264 150 L150 150 Z" fill="#ea580c"/><path d="M264 150 A118 118 0 0 1 150 264 L150 150 Z" fill="#1c1917"/><path d="M150 264 A118 118 0 0 1 150 32 L150 150 Z" fill="${sauceColor}"/></svg>`;
-    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg).replace(/'/g, '%27');
   }
 
   function renderTvSlide() {
@@ -222,29 +226,29 @@
       <div class="plate-column anim-pop-plate">
         <div class="fresh-tag"><i class="fa-solid fa-fire text-red-600"></i> RECIÉN SERVIDO</div>
         <div class="steam"><div class="steam-particle steam-1"></div><div class="steam-particle steam-2"></div><div class="steam-particle steam-3"></div></div>
-        <div class="clay-plate-wrapper"><img src="${dishImage}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" /></div>
+        <div class="clay-plate-wrapper"><img src="${dishImage || fallbackSvg}" onerror="this.onerror=null;this.src='${fallbackSvg}';" alt="${dish.name}" class="clay-plate-img" /></div>
         <div class="price-card anim-bounce-price">
-          <div class="price-label">Comer aquí</div>
+          <div class="price-label">${dish.packageItems ? 'Paquete completo' : 'Comer aquí'}</div>
           <div class="price-value font-price">$${dish.price}<small>.00</small></div>
-          <div class="takeout font-price"><i class="fa-solid fa-bag-shopping"></i> Para llevar: $${dish.takeoutPrice}.00</div>
+          ${dish.takeoutPrice != null ? `<div class="takeout font-price"><i class="fa-solid fa-bag-shopping"></i> Para llevar: $${dish.takeoutPrice}.00</div>` : ''}
         </div>
       </div>`;
 
     function renderOptions(items, icon, fallback) {
       return items.length ? items.map(item => `
-        <div class="menu-option"><span class="option-icon" style="--option-color:${item.color}"><i class="fa-solid ${icon}" aria-hidden="true"></i></span><span>${item.name}</span></div>
+        <div class="menu-option"><span class="option-icon" style="--option-color:${item.color}">${item.img ? `<img src="${item.img}" alt="" onerror="this.hidden=true;this.nextElementSibling.hidden=false;"><i class="fa-solid ${icon}" aria-hidden="true" hidden></i>` : `<i class="fa-solid ${icon}" aria-hidden="true"></i>`}</span><span>${item.name}</span></div>
       `).join('') : `<div class="menu-option">${fallback}</div>`;
     }
 
     const infoColumn = `
       <div class="info-column">
         <div class="dish-heading anim-slide-title">
-          <div class="dish-tag">${dish.selectedVariant && dish.selectedVariant !== 'Normal' ? dish.selectedVariant : 'Tradicional'}</div>
+          <div class="dish-tag">${dish.packageItems ? 'Paquete con tacos y agua' : dish.selectedVariant && dish.selectedVariant !== 'Normal' ? dish.selectedVariant : 'Tradicional'}</div>
           <h2 class="font-display">${dish.name}</h2>
           <p><i class="fa-solid fa-circle-check text-amber-300"></i> ${dish.sides}</p>
         </div>
         <div class="options-grid">
-          <div class="option-card anim-fade-up-1"><div class="option-title">Entrada a elegir</div><div class="option-list">${renderOptions(activeSoups, 'fa-bowl-rice', 'Sopa del día')}</div></div>
+          <div class="option-card anim-fade-up-1"><div class="option-title">${dish.packageItems ? 'Incluye en tu paquete' : 'Entrada a elegir'}</div><div class="option-list">${renderOptions(dish.packageItems || activeSoups, dish.packageItems ? 'fa-utensils' : 'fa-bowl-rice', 'Sopa del día')}</div></div>
           <div class="option-card water-card anim-fade-up-2"><div class="option-title">Agua del día (1 litro)</div><div class="option-list">${renderOptions(activeWaters, 'fa-glass-water', 'Agua del día')}</div></div>
         </div>
       </div>`;

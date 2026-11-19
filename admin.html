@@ -95,7 +95,7 @@
 
     function getFallbackClaySvg(sauceColor = '#4d7c0f') {
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><circle cx="150" cy="150" r="146" fill="#9a4819"/><circle cx="150" cy="150" r="132" fill="#7c3510"/><circle cx="150" cy="150" r="126" fill="#b45309"/><path d="M150 32 A118 118 0 0 1 264 150 L150 150 Z" fill="#ea580c"/><path d="M264 150 A118 118 0 0 1 150 264 L150 150 Z" fill="#1c1917"/><path d="M150 264 A118 118 0 0 1 150 32 L150 150 Z" fill="${sauceColor}"/></svg>`;
-        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg).replace(/'/g, '%27');
     }
 
     function renderAdmin() {
@@ -114,7 +114,7 @@
         document.getElementById('adminSoupsList').innerHTML = menuState.soups.map(s => `
         <label class="flex items-center justify-between p-2.5 rounded-xl border ${s.active ? 'bg-amber-50 border-amber-400' : 'bg-slate-50 border-slate-200'} cursor-pointer">
           <span class="text-xs font-bold text-slate-800 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full" style="background:${s.color}"></span> ${s.name}
+            ${s.img ? `<img src="${s.img}" alt="" class="w-10 h-10 object-contain rounded-full">` : `<span class="w-3 h-3 rounded-full" style="background:${s.color}"></span>`} ${s.name}
           </span>
           <input type="checkbox" ${s.active ? 'checked' : ''} onchange="toggleSoup('${s.id}')" class="w-5 h-5 accent-amber-500 rounded">
         </label>
@@ -123,7 +123,7 @@
         document.getElementById('adminWatersList').innerHTML = menuState.waters.map(w => `
         <label class="flex items-center justify-between p-2.5 rounded-xl border ${w.active ? 'bg-sky-50 border-sky-400' : 'bg-slate-50 border-slate-200'} cursor-pointer">
           <span class="text-xs font-bold text-slate-800 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full" style="background:${w.color}"></span> ${w.name}
+            ${w.img ? `<img src="${w.img}" alt="" class="w-10 h-10 object-contain rounded-full">` : `<span class="w-3 h-3 rounded-full" style="background:${w.color}"></span>`} ${w.name}
           </span>
           <input type="checkbox" ${w.active ? 'checked' : ''} onchange="toggleWater('${w.id}')" class="w-5 h-5 accent-sky-500 rounded">
         </label>
@@ -136,7 +136,7 @@
         </label>
       `).join('');
 
-        const categories = ['Todos', 'Puerco', 'Res', 'Pollo', 'Antojitos', 'Caldos', 'Especiales'];
+        const categories = ['Todos', 'Puerco', 'Res', 'Pollo', 'Antojitos', 'Caldos', 'Especiales', 'Paquetes'];
         document.getElementById('categoryTabs').innerHTML = categories.map(cat => `
         <button onclick="selectedCategory='${cat}';renderAdmin()" class="px-3 py-1 rounded-full text-xs font-extrabold whitespace-nowrap transition ${selectedCategory === cat ? 'bg-slate-900 text-amber-400' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
           ${cat}
@@ -155,12 +155,13 @@
           <div class="flex items-center justify-between gap-3">
             <div class="flex items-center gap-3">
               <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-700 shrink-0 bg-amber-800">
-                <img src="${d.img}" onerror="this.onerror=null;this.src='${getFallbackClaySvg(d.sauceColor)}';" class="w-full h-full object-cover scale-110" />
+                <img src="${FondaMenu.dishImage(d) || getFallbackClaySvg(d.sauceColor)}" onerror="this.onerror=null;this.src='${getFallbackClaySvg(d.sauceColor)}';" class="w-full h-full object-cover scale-110" />
               </div>
               <div>
                 <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-200 text-slate-700">${d.category}</span>
                 <h4 class="font-extrabold text-slate-900 text-sm mt-0.5">${d.name}</h4>
-                <p class="text-xs font-bold text-emerald-700">$${d.price}.00 <span class="text-slate-400 font-normal">| Llevar: $${d.takeoutPrice}.00</span></p>
+                ${d.packageItems ? `<p class="text-xs font-bold text-amber-700">Incluye orden de tacos dorados y 1L de agua</p>` : ''}
+                <p class="text-xs font-bold text-emerald-700">$${d.price}.00 ${d.takeoutPrice != null ? `<span class="text-slate-400 font-normal">| Llevar: $${d.takeoutPrice}.00</span>` : ''}</p>
               </div>
             </div>
             <button onclick="toggleDish('${d.id}')" class="px-4 py-2 rounded-xl font-black text-xs transition shrink-0 ${d.active ? 'bg-emerald-600 text-white shadow' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
@@ -215,6 +216,12 @@
         saveState();
     }
 
+    window.addEventListener('storage', event => {
+        if (event.key === 'fonda_menu_state_v1' || event.key === null) {
+            menuState = FondaMenu.load();
+            renderAdmin();
+        }
+    });
     renderAdmin();
 </script>
 </body>
