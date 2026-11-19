@@ -157,3 +157,24 @@ Prueba adicional: `node tests/display.test.cjs` comprueba la rotación de los fo
 La presentación de guisados utiliza tarjetas crema, títulos con palabras de color según la salsa y entrada escalonada, fotografías grandes para entradas y aguas, ondas orgánicas de fondo y destellos animados. El precio tiene un pulso suave. Las animaciones respetan `prefers-reduced-motion`; no alteran los precios ni las selecciones guardadas.
 
 Para agregar administradores, actualizar el UID tanto en `firebase-sync.js` como en `firestore.rules`, renovar la versión del script en ambos HTML y desplegar Hosting y reglas. `node tests/cloud.test.cjs` comprueba que las dos listas coincidan.
+
+## Compatibilidad con televisores
+
+Las pulgadas indican la diagonal física, no el tamaño del navegador en píxeles. Entre las medidas comerciales habituales hay 24, 27, 32, 40, 42, 43, 48, 49, 50, 55, 58, 60, 65, 70, 75, 77, 83, 85, 86, 98, 100 y 115 pulgadas; no es una lista universal de todos los fabricantes. El mismo tamaño puede ofrecer distintas resoluciones, y el navegador puede usar una resolución lógica menor que la del panel.
+
+La pantalla `index.html` incluye su distribución esencial localmente y no carga el compilador Tailwind por CDN. Incluye tamaños alternativos para navegadores sin `clamp()`, `min()`, `aspect-ratio`, `inset`, altura `dvh` o separación `gap` de Flexbox. Fuentes e iconos todavía son recursos externos; el texto tiene fuente de respaldo. El admin mantiene su propia dependencia de Tailwind.
+
+| Formato probado en navegador | Resoluciones del área de contenido |
+| --- | --- |
+| Horizontal pequeño | 640×360, 800×450, 960×480, 1024×576 |
+| HD / área reducida por barras | 1280×720, 1366×640, 1366×768 |
+| Full HD / panorámico | 1920×1080, 1920×540 |
+| 4K | 3840×2160 |
+| 4:3 | 1024×768 |
+| Celular | 390×844, con desplazamiento vertical |
+
+Las medidas de los elementos se revisaron en navegador: no hubo desbordamiento horizontal en esos tamaños. El intento de probar 7680×4320 quedó limitado por la herramienta a 4096×4096; por ello no se declara 8K como verificado. Las pruebas de tamaño no emulan el motor antiguo de cada marca ni sustituyen revisar la TV física.
+
+Después de publicar, recargar la página en la TV. Si el navegador conserva una versión anterior, cerrar la pestaña y volver a abrirla. La distribución se adapta al área disponible, incluidas las barras del navegador. El modo de pantalla completa permite aprovechar más superficie, cuando el navegador lo ofrece.
+
+Fuentes: [resolución de aplicaciones Samsung](https://developer.samsung.com/smarttv/develop/guides/fundamentals/managing-screen-resolution.html), [compatibilidad del navegador de TV Samsung](https://help.dsp.samsungads.com/website-rendering-on-samsung-tvs), [tamaños y familias de TV LG](https://www.lg.com/uk/buying-guides/tv-lineup-guide/lgsubscribe-buy/).

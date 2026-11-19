@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;800;900&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
       --font-display: 'Bebas Neue', sans-serif;
@@ -55,7 +54,7 @@
       height: 74%;
       background: radial-gradient(ellipse at 50% 65%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.5) 30%, rgba(255,255,255,0) 72%);
       border-radius: 48% 52% 38% 62%;
-      filter: blur(clamp(3px, .55vw, 11px));
+      filter: blur(6px); filter: blur(clamp(3px, .55vw, 11px));
       opacity: 0;
       transform-origin: center bottom;
       animation: riseSteam 4s ease-in-out infinite;
@@ -102,8 +101,8 @@
     .clay-plate-wrapper::after {
       content: '';
       position: absolute;
-      inset: 0;
-      border: clamp(6px, .72vw, 26px) solid #fffdf8;
+      top: 0; right: 0; bottom: 0; left: 0; inset: 0;
+      border: .72vw solid #fffdf8; border: clamp(6px, .72vw, 26px) solid #fffdf8;
       box-shadow: inset 0 0 0 1px #ded7cd, inset 0 2px 4px #a1927b25;
       border-radius: inherit;
       z-index: 1;
@@ -124,36 +123,36 @@
     .tv-screen { width: 100%; height: 100dvh; padding: 1.2vh 1.5vw; gap: 1vh; }
     .tv-header { flex: 0 0 auto; }
     .tv-header > div:first-child { background: #80510bc9; border: 0; padding: .45vh 1.2vw; }
-    .tv-header span { font-size: clamp(10px, 1.35vw, 24px); }
+    .tv-header span { font-size: 1.35vw; font-size: clamp(10px, 1.35vw, 24px); }
     #tvSlideContent { min-height: 0; width: 88%; margin: 0 auto; flex: 1; gap: 6%; justify-content: center; }
     .plate-column { width: min(35.2vw, 61vh); position: relative; flex: 0 0 min(35.2vw, 61vh); aspect-ratio: 1; isolation: isolate; }
     .clay-plate-wrapper { width: 100%; height: 100%; position: relative; z-index: 10; }
-    .fresh-tag { position: absolute; top: -3%; left: 0; z-index: 25; padding: .35em .9em; background: #ffe18a; border: 2px solid white; border-radius: 99px; color: #20170d; font-size: clamp(10px, 1.2vw, 23px); font-weight: 900; }
+    .fresh-tag { position: absolute; top: -3%; left: 0; z-index: 25; padding: .35em .9em; background: #ffe18a; border: 2px solid white; border-radius: 99px; color: #20170d; font-size: 1.2vw; font-size: clamp(10px, 1.2vw, 23px); font-weight: 900; }
     .plate-column > .steam { position: absolute; top: -16%; left: 18%; width: 64%; height: 34%; z-index: 20; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 65%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 65%, transparent); pointer-events: none; }
-    .price-card { position: absolute; right: -5%; bottom: -7%; z-index: 30; width: 75%; padding: 2% 4%; border: max(3px, .4vw) solid white; border-radius: 1.7vw; background: #cc191e; color: white; text-align: center; box-shadow: 0 1.3vw 2vw #59300066; }
-    .price-label { display: inline-block; background: #ffdc32; color: #302007; border-radius: .5em; padding: .1em .65em; font-size: clamp(10px, 1.25vw, 24px); font-weight: 900; text-transform: uppercase; }
-    .price-value { font-size: clamp(30px, 5vw, 100px); line-height: 1.05; font-weight: 900; letter-spacing: -.065em; }
+    .price-card { position: absolute; right: -5%; bottom: -7%; z-index: 30; width: 75%; padding: 2% 4%; border: 4px solid white; border: max(3px, .4vw) solid white; border-radius: 1.7vw; background: #cc191e; color: white; text-align: center; box-shadow: 0 1.3vw 2vw #59300066; }
+    .price-label { display: inline-block; background: #ffdc32; color: #302007; border-radius: .5em; padding: .1em .65em; font-size: 1.25vw; font-size: clamp(10px, 1.25vw, 24px); font-weight: 900; text-transform: uppercase; }
+    .price-value { font-size: 5vw; font-size: clamp(30px, 5vw, 100px); line-height: 1.05; font-weight: 900; letter-spacing: -.065em; }
     .price-value small { font-size: .38em; color: #ffdc32; letter-spacing: -.03em; }
-    .takeout { background: #17131b; color: #ffdc32; border-radius: .65em; padding: .25em; font-size: clamp(10px, 1.35vw, 26px); font-weight: 900; white-space: nowrap; }
+    .takeout { background: #17131b; color: #ffdc32; border-radius: .65em; padding: .25em; font-size: 1.35vw; font-size: clamp(10px, 1.35vw, 26px); font-weight: 900; white-space: nowrap; }
     .info-column { width: 54%; display: flex; flex-direction: column; gap: 1.6vh; }
     .dish-heading { position: relative; background: #c41920; color: white; text-align: center; border: .25vw solid #f79955; border-radius: 1.8vw; padding: 1.5vh 1.4vw; box-shadow: 0 .7vw 1vw #9d47032b; }
-    .dish-heading h2 { margin: 0; font-size: clamp(26px, 5.2vw, 100px); line-height: 1.05; text-wrap: balance; font-weight: 400; }
-    .dish-heading p { margin: .6vh 0 0; color: #fff0bc; font-size: clamp(10px, 1.5vw, 28px); font-weight: 700; line-height: 1.4; }
-    .dish-tag { position: absolute; right: 0; bottom: 100%; background: #17131b; color: #ffce16; border-radius: 1vw 1vw 0 0; padding: .25em 1em; font-size: clamp(9px, 1.2vw, 23px); font-weight: 900; text-transform: uppercase; }
+    .dish-heading h2 { margin: 0; font-size: 5.2vw; font-size: clamp(26px, 5.2vw, 100px); line-height: 1.05; text-wrap: balance; font-weight: 400; }
+    .dish-heading p { margin: .6vh 0 0; color: #fff0bc; font-size: 1.5vw; font-size: clamp(10px, 1.5vw, 28px); font-weight: 700; line-height: 1.4; }
+    .dish-tag { position: absolute; right: 0; bottom: 100%; background: #17131b; color: #ffce16; border-radius: 1vw 1vw 0 0; padding: .25em 1em; font-size: 1.2vw; font-size: clamp(9px, 1.2vw, 23px); font-weight: 900; text-transform: uppercase; }
     .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vw; }
     .option-card { min-width: 0; background: #fffaf0; border: .25vw solid #ffdc6b; border-radius: 1.8vw; padding: 1vh .8vw; box-shadow: 0 .7vw 1vw #9d47032b; text-align: center; }
-    .option-title { display: inline-block; background: #fff0bd; color: #b61920; border-radius: 99px; padding: .25em .8em; font-size: clamp(9px, 1.15vw, 22px); font-weight: 900; text-transform: uppercase; }
+    .option-title { display: inline-block; background: #fff0bd; color: #b61920; border-radius: 99px; padding: .25em .8em; font-size: 1.15vw; font-size: clamp(9px, 1.15vw, 22px); font-weight: 900; text-transform: uppercase; }
     .water-card .option-title { color: #006a94; background: #e0f2fe; }
     .option-list { display: flex; justify-content: space-evenly; gap: .5vw; margin-top: 1vh; }
-    .menu-option { flex: 1; min-width: 0; font-size: clamp(9px, 1.2vw, 23px); font-weight: 800; line-height: 1.2; }
+    .menu-option { flex: 1; min-width: 0; font-size: 1.2vw; font-size: clamp(9px, 1.2vw, 23px); font-weight: 800; line-height: 1.2; }
     .option-icon { display: flex; align-items: center; justify-content: center; width: 5vw; height: 5vw; margin: 0 auto .7vh; border-radius: 50%; border: .5vw solid white; outline: 1px solid #eedfc0; background: var(--option-color); color: #fff5ce; font-size: 2.5vw; box-shadow: 0 .2vw .4vw #0002; }
     .option-icon { overflow: hidden; }
     .option-icon img { width: 100%; height: 100%; object-fit: contain; background: #fffaf0; }
     .option-icon [hidden] { display: none; }
     .option-card:has(.menu-option:only-child) .option-icon { width: 7vw; height: 7vw; }
     .tv-footer { flex: 0 0 auto; border-radius: 99px; padding: .35vh 1vw; gap: 1vw; flex-wrap: nowrap; }
-    .tv-footer > div:first-child { font-size: clamp(9px, 1.1vw, 21px); white-space: nowrap; }
-    #tvDessertsBar { flex: 1; justify-content: center; gap: .5vw; font-size: clamp(9px, 1.1vw, 21px); line-height: 1.4; }
+    .tv-footer > div:first-child { font-size: 1.1vw; font-size: clamp(9px, 1.1vw, 21px); white-space: nowrap; }
+    #tvDessertsBar { flex: 1; justify-content: center; gap: .5vw; font-size: 1.1vw; font-size: clamp(9px, 1.1vw, 21px); line-height: 1.4; }
     @media (min-aspect-ratio: 2/1) { #tvSlideContent { width: 76%; } .plate-column { width: min(32vw, 62vh); flex-basis: min(32vw, 62vh); } }
     @media (max-aspect-ratio: 1/1) { body { overflow-y: auto; } .tv-screen { height: auto; min-height: 100dvh; } #tvSlideContent { flex-direction: column; gap: 8vh; padding: 5vh 0; } .plate-column { width: 65%; flex-basis: auto; } .info-column { width: 100%; } .dish-heading h2 { font-size: 8vw; } .option-icon { width: 10vw; height: 10vw; font-size: 5vw; } .tv-footer { flex-wrap: wrap; } }
 
@@ -168,9 +167,9 @@
     .tv-screen[data-kind="desserts"] #tvSlideContent { width: 94%; }
     .dessert-page { width: 100%; position: relative; display: flex; flex-direction: column; gap: 2.2vh; padding: 1vh 1vw; color: #61345f; }
     .dessert-intro { text-align: center; position: relative; z-index: 2; }
-    .dessert-eyebrow { margin: 0; font-size: clamp(12px, 1.3vw, 28px); font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
-    .dessert-intro h2 { font-size: clamp(36px, 5.6vw, 110px); font-weight: 400; line-height: 1; margin: .5vh 0; color: #963a73; text-shadow: 0 3px 0 #fff8; }
-    .dessert-intro > p:last-child { margin: 0; font-size: clamp(12px, 1.35vw, 28px); font-weight: 600; }
+    .dessert-eyebrow { margin: 0; font-size: 1.3vw; font-size: clamp(12px, 1.3vw, 28px); font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .dessert-intro h2 { font-size: 5.6vw; font-size: clamp(36px, 5.6vw, 110px); font-weight: 400; line-height: 1; margin: .5vh 0; color: #963a73; text-shadow: 0 3px 0 #fff8; }
+    .dessert-intro > p:last-child { margin: 0; font-size: 1.35vw; font-size: clamp(12px, 1.35vw, 28px); font-weight: 600; }
     .dessert-grid { display: grid; grid-template-columns: repeat(var(--dessert-count, 3), minmax(0, 1fr)); gap: 2.2vw; width: 100%; max-width: 1600px; margin: 0 auto; position: relative; z-index: 2; }
     .dessert-card { position: relative; border: max(3px, .3vw) solid #fff; border-radius: 2.6vw; padding: 1.3vh 1.2vw 1.8vh; background: #fff8efed; box-shadow: 0 1vh 0 #a35b8e16, 0 1.6vh 3vh #71345920; text-align: center; display: flex; align-items: center; flex-direction: column; }
     .dessert-card { animation: dessertBounceIn .9s ease-out .12s both; transform-origin: center; }
@@ -184,12 +183,12 @@
     }
     .dessert-card:nth-child(2) { background: #fff0f7ed; }
     .dessert-card:nth-child(3) { background: #f6efffed; }
-    .dessert-art { width: 100%; height: clamp(130px, 25vh, 600px); object-fit: contain; filter: drop-shadow(0 1vh .6vh #ab648123); }
-    .dessert-card h3 { font-size: clamp(17px, 2vw, 64px); line-height: 1.2; font-weight: 800; min-height: 2.4em; display: flex; align-items: center; justify-content: center; margin: .6vh 0 1vh; text-wrap: balance; }
-    .dessert-price { font-size: clamp(28px, 3.9vw, 120px); line-height: 1; font-weight: 900; color: #a72e67; margin-top: auto; }
+    .dessert-art { width: 100%; height: 25vh; height: clamp(130px, 25vh, 600px); object-fit: contain; filter: drop-shadow(0 1vh .6vh #ab648123); }
+    .dessert-card h3 { font-size: 2vw; font-size: clamp(17px, 2vw, 64px); line-height: 1.2; font-weight: 800; min-height: 2.4em; display: flex; align-items: center; justify-content: center; margin: .6vh 0 1vh; text-wrap: balance; }
+    .dessert-price { font-size: 3.9vw; font-size: clamp(28px, 3.9vw, 120px); line-height: 1; font-weight: 900; color: #a72e67; margin-top: auto; }
     .dessert-price small { font-size: .4em; }
-    .dessert-caption { font-size: clamp(10px, 1vw, 20px); font-weight: 700; margin: .8vh 0 0; color: #8a587e; }
-    .sweet-decor { position: absolute; width: clamp(45px, 6vw, 120px); height: auto; opacity: .65; pointer-events: none; animation: candyFloat 5s ease-in-out infinite; z-index: 0; }
+    .dessert-caption { font-size: 1vw; font-size: clamp(10px, 1vw, 20px); font-weight: 700; margin: .8vh 0 0; color: #8a587e; }
+    .sweet-decor { position: absolute; width: 6vw; width: clamp(45px, 6vw, 120px); height: auto; opacity: .65; pointer-events: none; animation: candyFloat 5s ease-in-out infinite; z-index: 0; }
     .sweet-decor-left { left: -1%; top: -2%; transform: rotate(-18deg); }
     .sweet-decor-right { right: 0; top: 3%; animation-delay: -2.5s; }
     .sweet-sparkle { transform-origin: center; animation: sparkle 3s ease-in-out infinite; }
@@ -207,7 +206,7 @@
     }
 
     /* Formas de fondo y composición inspirada en el cartel del local. */
-    .background-shapes { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+    .background-shapes { position: absolute; top: 0; right: 0; bottom: 0; left: 0; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
     .background-blob { position: absolute; width: 65vw; height: 65vw; border-radius: 42% 58% 68% 32% / 51% 32% 68% 49%; background: linear-gradient(135deg, #ffca2470, #ff5c1090); animation: driftShape 19s ease-in-out infinite alternate; }
     .background-blob:nth-child(1) { left: -28%; top: -80%; }
     .background-blob:nth-child(2) { right: -34%; top: -38%; background: linear-gradient(45deg, #e6402270, #ff8a0080); animation-delay: -7s; animation-duration: 24s; }
@@ -226,34 +225,34 @@
     .tv-screen[data-kind="dish"] .plate-column { width: min(43vw, 67vh); flex: 0 0 min(43vw, 67vh); }
     .tv-screen[data-kind="dish"] .info-column { flex: 1; min-width: 0; width: auto; gap: 4vh; }
     .tv-screen[data-kind="dish"] .dish-heading { background: linear-gradient(125deg, #fff9ef, #fff0e3); border: 2px solid #fff9; border-radius: 3.3vw; padding: 2.5vh 2vw; text-align: left; color: #54200f; box-shadow: 0 1.2vh 2.5vh #a3401933; }
-    .tv-screen[data-kind="dish"] .dish-heading h2 { font-family: var(--font-body); font-size: clamp(28px, 4.3vw, 100px); font-weight: 900; line-height: 1.04; letter-spacing: -.045em; text-wrap: balance; }
-    .tv-screen[data-kind="dish"] .dish-heading h2.long-title { font-size: clamp(25px, 3.5vw, 84px); }
+    .tv-screen[data-kind="dish"] .dish-heading h2 { font-family: var(--font-body); font-size: 4.3vw; font-size: clamp(28px, 4.3vw, 100px); font-weight: 900; line-height: 1.04; letter-spacing: -.045em; text-wrap: balance; }
+    .tv-screen[data-kind="dish"] .dish-heading h2.long-title { font-size: 3.5vw; font-size: clamp(25px, 3.5vw, 84px); }
     .title-word { display: inline-block; animation: wordSettle .8s cubic-bezier(.16,1,.3,1) both; animation-delay: calc(var(--word) * .07s); }
     .title-word.green-word { color: #4d741a; }
     .title-word.red-word { color: #bc3b20; }
     @keyframes wordSettle { from { opacity: 0; transform: translateY(.25em) rotate(-3deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
-    .tv-screen[data-kind="dish"] .dish-heading p { color: #61301c; margin-top: 1.4vh; font-size: clamp(12px, 1.35vw, 30px); line-height: 1.35; }
+    .tv-screen[data-kind="dish"] .dish-heading p { color: #61301c; margin-top: 1.4vh; font-size: 1.35vw; font-size: clamp(12px, 1.35vw, 30px); line-height: 1.35; }
     .tv-screen[data-kind="dish"] .dish-heading p i { color: #5d8528; }
-    .tv-screen[data-kind="dish"] .dish-tag { font-size: clamp(10px, 1vw, 22px); right: 3vw; background: #63301a; }
+    .tv-screen[data-kind="dish"] .dish-tag { font-size: 1vw; font-size: clamp(10px, 1vw, 22px); right: 3vw; background: #63301a; }
     .tv-screen[data-kind="dish"] .option-card { border: 2px solid #fffc; border-radius: 2.6vw; padding: 0 1vw 1.2vh; background: linear-gradient(135deg, #fffaf2, #fff0e1); }
-    .tv-screen[data-kind="dish"] .option-title { position: relative; top: -1.6vh; padding: .35em 1em; color: #54200f; background: linear-gradient(100deg,#ffe259,#ffbb18); box-shadow: 0 .4vh .6vh #a35d1725; border: 2px solid #fff7; font-size: clamp(11px,1.45vw,32px); text-transform: none; line-height: 1.15; }
+    .tv-screen[data-kind="dish"] .option-title { position: relative; top: -1.6vh; padding: .35em 1em; color: #54200f; background: linear-gradient(100deg,#ffe259,#ffbb18); box-shadow: 0 .4vh .6vh #a35d1725; border: 2px solid #fff7; font-size: 1.45vw; font-size: clamp(11px,1.45vw,32px); text-transform: none; line-height: 1.15; }
     .tv-screen[data-kind="dish"] .water-card .option-title { color: #233963; background: linear-gradient(100deg,#d1f2ff,#8bd7f4); }
     .tv-screen[data-kind="dish"] .option-list { margin-top: -1vh; gap: .45vw; }
-    .tv-screen[data-kind="dish"] .menu-option { background: #efcfb22b; border-radius: 1.6vw; padding: .4vh .15vw; color: #54200f; font-size: clamp(11px,1.5vw,32px); }
-    .tv-screen[data-kind="dish"] .option-icon { width: 100%; height: clamp(66px, 12vh, 260px); border: 0; outline: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
+    .tv-screen[data-kind="dish"] .menu-option { background: #efcfb22b; border-radius: 1.6vw; padding: .4vh .15vw; color: #54200f; font-size: 1.5vw; font-size: clamp(11px,1.5vw,32px); }
+    .tv-screen[data-kind="dish"] .option-icon { width: 100%; height: 12vh; height: clamp(66px, 12vh, 260px); border: 0; outline: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
     .tv-screen[data-kind="dish"] .option-icon img { background: transparent; filter: drop-shadow(0 .5vh .5vh #893d2320); }
     .tv-screen[data-kind="dish"] .option-icon > i { background: var(--option-color); border-radius: 50%; padding: .6em; font-size: 2vw; }
     .tv-screen[data-kind="dish"] .price-card { background: linear-gradient(125deg, #f32632, #ce0d1b); border-radius: 2.8vw; width: 84%; right: -2%; padding: 4% 4% 3%; }
-    .price-card::after { z-index: 0; content: ''; position: absolute; inset: .6vw; border: 1px dashed #ffffff80; border-radius: 2.1vw; pointer-events: none; }
-    .tv-screen[data-kind="dish"] .price-label { position: relative; z-index: 1; margin-top: -10%; display: table; margin-left: auto; margin-right: auto; padding: .3em 1em; border-radius: .7em; background: linear-gradient(100deg,#ffe96e,#ffcd27); font-size: clamp(12px,1.65vw,38px); text-transform: none; }
-    .tv-screen[data-kind="dish"] .price-value { font-size: clamp(40px, 6.4vw, 150px); }
-    .tv-screen[data-kind="dish"] .takeout { background: #9b1017; font-size: clamp(12px,1.5vw,34px); padding: .3em; }
+    .price-card::after { z-index: 0; content: ''; position: absolute; top: .6vw; right: .6vw; bottom: .6vw; left: .6vw; inset: .6vw; border: 1px dashed #ffffff80; border-radius: 2.1vw; pointer-events: none; }
+    .tv-screen[data-kind="dish"] .price-label { position: relative; z-index: 1; margin-top: -10%; display: table; margin-left: auto; margin-right: auto; padding: .3em 1em; border-radius: .7em; background: linear-gradient(100deg,#ffe96e,#ffcd27); font-size: 1.65vw; font-size: clamp(12px,1.65vw,38px); text-transform: none; }
+    .tv-screen[data-kind="dish"] .price-value { font-size: 6.4vw; font-size: clamp(40px, 6.4vw, 150px); }
+    .tv-screen[data-kind="dish"] .takeout { background: #9b1017; font-size: 1.5vw; font-size: clamp(12px,1.5vw,34px); padding: .3em; }
     .price-value > span { display: inline-block; animation: priceNudge 4.5s ease-in-out 1s infinite; }
     @keyframes priceNudge { 0%,80%,100% { transform: scale(1); } 88% { transform: scale(1.035) rotate(-1deg); } 94% { transform: scale(1.01); } }
     .accent-rays { position: absolute; width: 13%; height: auto; left: -2%; top: 3%; z-index: 24; pointer-events: none; transform-origin: center; animation: raysWiggle 3.5s ease-in-out infinite; }
     .heading-rays { left: auto; right: 2%; top: -7%; width: 10%; color: #55791e; }
     @keyframes raysWiggle { 0%,100% { transform: rotate(-7deg) scale(.95); opacity: .7; } 50% { transform: rotate(7deg) scale(1.08); opacity: 1; } }
-    .tv-screen[data-kind="dish"] .fresh-tag { left: 5%; top: -4%; font-size: clamp(10px,1vw,22px); }
+    .tv-screen[data-kind="dish"] .fresh-tag { left: 5%; top: -4%; font-size: 1vw; font-size: clamp(10px,1vw,22px); }
     .tv-screen[data-kind="dish"] .tv-footer { background: linear-gradient(100deg,#57200e,#7a2b0c); padding: 1vh 1.5vw; border-radius: 1.6vw; }
     @media (min-aspect-ratio: 2/1) { .tv-screen[data-kind="dish"] .plate-column { width: 64vh; flex-basis: 64vh; } .tv-screen[data-kind="dish"] #tvSlideContent { width: 88%; } }
     @media (max-aspect-ratio: 1/1) {
@@ -267,6 +266,76 @@
       .tv-screen[data-kind="dish"] .takeout { font-size: 3vw; }
       .tv-screen[data-kind="dish"] .price-label { font-size: 3.5vw; }
       #slideDots { max-width: 27%; }
+    }
+
+    /* TV: estilos esenciales locales, incluso si una fuente o CDN no responde. */
+    .menu-empty { width: 100%; padding: 32px; background: #fffaf0; color: #54200f; border-radius: 24px; text-align: center; }
+    html, body { width: 100%; min-height: 100%; }
+    body { font-family: Poppins, Arial, sans-serif; }
+    h2, h3, p { margin: 0; }
+    button { font: inherit; }
+    img { display: block; }
+    .tv-screen { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 100vh; height: 100dvh; }
+    .tv-dots-overlay { position: absolute; top: 0; right: 0; bottom: 0; left: 0; pointer-events: none; }
+    .tv-header { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; min-height: 5vh; }
+    .tv-header > div:first-child { display: flex; align-items: center; border-radius: 50px; color: white; font-weight: 900; text-transform: uppercase; }
+    #headerIcon { margin-right: .7vw; }
+    #slideDots { display: flex; align-items: center; padding: .8vh 1vw; background: rgba(80,30,10,.6); border-radius: 50px; }
+    .slide-dot { margin: 0 .22vw; }
+    #tvSlideContent { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; min-height: 0; margin-top: 3vh; margin-bottom: 3vh; }
+    .tv-screen[data-kind="dish"] .plate-column { flex: 0 0 40vw; width: 40vw; height: 40vw; max-width: 65vh; max-height: 65vh; margin-right: 4vw; }
+    .tv-screen[data-kind="dish"] .info-column { display: flex; flex-direction: column; flex: 1 1 0%; min-width: 0; }
+    .dish-heading { margin-bottom: 3vh; }
+    .options-grid { display: flex; grid-template-columns: none; }
+    .option-card { flex: 1 1 0%; min-width: 0; }
+    .option-card + .option-card { margin-left: 1.2vw; }
+    .option-list { display: flex; }
+    .menu-option + .menu-option { margin-left: .4vw; }
+    .price-card { position: absolute; text-align: center; }
+    .price-value { margin: .5vh 0; }
+    .fresh-tag { white-space: nowrap; }
+    .tv-footer { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; color: white; }
+    .tv-footer > div:first-child { display: flex; align-items: center; font-weight: 800; }
+    .tv-footer i { margin-right: .5vw; }
+    #tvDessertsBar { display: flex; flex-wrap: wrap; align-items: center; font-weight: 700; }
+    #tvDessertsBar strong { color: #ffdc32; }
+    #screenSyncStatus { position: relative; z-index: 10; text-align: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    #screenSyncStatus:empty { display: none; }
+    .dessert-grid { display: flex; }
+    .dessert-card { flex: 1 1 0%; min-width: 0; }
+    .dessert-card + .dessert-card { margin-left: 2vw; }
+    /* Gap is additive on new browsers; margins alone work on old TVs. */
+    .tv-screen, #tvSlideContent, .info-column, .options-grid, .option-list, .dessert-grid { gap: 0; }
+    @media (orientation: landscape) and (max-height: 650px) {
+      .tv-screen[data-kind="dish"] .dish-heading { padding: 1.7vh 1.5vw; border-radius: 24px; }
+      .tv-screen[data-kind="dish"] .dish-heading h2 { font-size: 4vw; }
+      .tv-screen[data-kind="dish"] .dish-heading h2.long-title { font-size: 3vw; }
+      .tv-screen[data-kind="dish"] .dish-heading p { font-size: 1.25vw; margin-top: 1vh; }
+      .tv-screen[data-kind="dish"] .option-title { font-size: 1.3vw; }
+      .tv-screen[data-kind="dish"] .menu-option { font-size: 1.35vw; }
+      .tv-screen[data-kind="dish"] .option-icon { height: 10vh; }
+      .tv-screen[data-kind="dish"] .plate-column { width: 62vh; height: 62vh; flex-basis: 62vh; }
+      .tv-screen[data-kind="dish"] .price-value { font-size: 8vh; }
+      .tv-screen[data-kind="dish"] .price-label { font-size: 2.5vh; }
+      .tv-screen[data-kind="dish"] .takeout { font-size: 2.5vh; }
+      .dessert-art { height: 23vh; }
+      .dessert-intro h2 { font-size: 7vh; }
+      .dessert-card h3 { font-size: 3vh; }
+      .dessert-price { font-size: 6vh; }
+    }
+    @media (max-aspect-ratio: 1/1) {
+      body { overflow-y: auto; height: auto; }
+      .tv-screen, .tv-screen[data-kind="dish"] { height: auto; min-height: 100vh; padding: 16px; }
+      .tv-header { margin-bottom: 24px; }
+      .tv-header span { font-size: 11px; }
+      #tvSlideContent { flex-direction: column; }
+      .tv-screen[data-kind="dish"] .plate-column { flex: 0 0 auto; width: 68vw; height: 68vw; max-width: none; max-height: none; margin: 8vh 0 12vh; }
+      .tv-screen[data-kind="dish"] .info-column { flex: 0 0 auto; width: 100%; }
+      .dish-heading { margin-bottom: 4vh; }
+      .dessert-grid { flex-direction: column; }
+      .dessert-card + .dessert-card { margin-left: 0; margin-top: 20px; }
+      .tv-footer { flex-wrap: wrap; margin-top: 20px; }
+      .dessert-intro { margin-bottom: 20px; }
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; } }
   </style>
@@ -378,7 +447,7 @@
       return;
     }
     if (!activeDishes.length) {
-      stage.innerHTML = `<div class="w-full text-center bg-white/95 rounded-3xl p-8 shadow-2xl"><h2 class="text-3xl font-black">¡Gracias por su preferencia!</h2><p>Esperando platillos activos...</p></div>`;
+      stage.innerHTML = `<div class="menu-empty"><h2 class="text-3xl font-black">¡Gracias por su preferencia!</h2><p>Esperando platillos activos...</p></div>`;
       return;
     }
 
