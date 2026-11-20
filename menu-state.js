@@ -475,7 +475,7 @@
       "takeoutPrice": 100,
       "active": false,
       "sides": "Arroz, frijoles o ambos • Incluye 1L de agua y tortillas",
-      "img": "",
+      "img": "img/polloencrema.png",
       "sauceColor": "#9a3412",
       "variants": [],
       "selectedVariant": "",
@@ -677,12 +677,13 @@
       "price": 95,
       "takeoutPrice": 100,
       "active": false,
-      "sides": "Incluye entrada del día, 1L de agua y tortillas",
+      "sides": "Porción de pancita • Sin entrada ni bebida",
       "img": "img/pancita.png",
       "sauceColor": "#9a3412",
       "variants": [],
       "selectedVariant": "",
-      "includesSoup": true
+      "includesSoup": false,
+      "includesWater": false
     },
     {
       "id": "caldo_res",

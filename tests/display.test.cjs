@@ -21,3 +21,9 @@ assert.equal((html.match(/class="dessert-card"/g)||[]).length,2);assert(!html.in
 state.dishes.forEach(x=>x.active=false);ctx.FondaMenu.save(state);vm.runInContext('renderTvSlide()',ctx);assert.equal(nodes.tvScreen.dataset.kind,'desserts');
 state.desserts.forEach(x=>x.active=false);ctx.FondaMenu.save(state);vm.runInContext('renderTvSlide()',ctx);assert(nodes.tvSlideContent.innerHTML.includes('Esperando platillos activos'));
 console.log('OK: disponibilidad y precios del admin, solo postres y menú completamente vacío');
+
+state.dishes.forEach(x=>x.active=x.id==='pancita');ctx.FondaMenu.save(state);vm.runInContext('goToSlide(0)',ctx);
+html=nodes.tvSlideContent.innerHTML;
+assert(html.includes('img/pancita.png'));assert(html.includes('Sin entrada ni bebida'));assert(!html.includes('Entrada a elegir'));assert(!html.includes('Agua del día (1 litro)'));
+const crema=ctx.FondaMenu.load().dishes.find(d=>d.id==='pollo_crema');assert.equal(crema.img,'img/polloencrema.png');assert.equal(crema.variants.length,0);assert(fs.existsSync(crema.img));
+console.log('OK: pancita sin entrada ni agua y pollo en crema con foto sin variantes');

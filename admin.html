@@ -136,7 +136,7 @@
   </div>
 </dialog>
 
-<script src="menu-state.js?v=582839c44ccd"></script>
+<script src="menu-state.js?v=e888fb6a3935"></script>
 <script src="firebase-sync.js?v=7c5210d99591"></script>
 <script>
     let publishing = false;
@@ -297,6 +297,7 @@
               <div>
                 <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-200 text-slate-700">${d.category}</span>
                 <h4 class="font-extrabold text-slate-900 text-sm mt-0.5">${d.name}</h4>
+                ${d.includesSoup === false && d.includesWater === false ? '<p class="text-xs font-bold text-amber-700">Solo pancita • Sin entrada ni bebida</p>' : ''}
                 ${d.packageItems ? `<p class="text-xs font-bold text-amber-700">Incluye orden de tacos dorados y 1L de agua</p>` : ''}
                 <p class="text-xs font-bold text-emerald-700">$${money(d.price)} ${d.takeoutPrice != null ? `<span class="text-slate-400 font-normal">| Llevar: $${money(d.takeoutPrice)}</span>` : ''}</p>
               </div>

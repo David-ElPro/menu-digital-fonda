@@ -401,7 +401,7 @@
   </div>
 </div>
 
-<script src="menu-state.js?v=582839c44ccd"></script>
+<script src="menu-state.js?v=e888fb6a3935"></script>
 <script src="firebase-sync.js?v=7c5210d99591"></script>
 <script>
   let currentSlideIdx = 0;
@@ -523,8 +523,8 @@
           <p><i class="fa-solid fa-circle-check text-amber-300"></i> ${dish.sides}</p>
         </div>
         <div class="options-grid">
-          <div class="option-card anim-fade-up-1"><div class="option-title">${dish.packageItems ? 'Incluye en tu paquete' : 'Entrada a elegir'}</div><div class="option-list">${renderOptions(dish.packageItems || activeSoups, dish.packageItems ? 'fa-utensils' : 'fa-bowl-rice', 'Sopa del día')}</div></div>
-          <div class="option-card water-card anim-fade-up-2"><div class="option-title">Agua del día (1 litro)</div><div class="option-list">${renderOptions(activeWaters, 'fa-glass-water', 'Agua del día')}</div></div>
+          ${dish.includesSoup !== false || dish.packageItems ? `<div class="option-card anim-fade-up-1"><div class="option-title">${dish.packageItems ? 'Incluye en tu paquete' : 'Entrada a elegir'}</div><div class="option-list">${renderOptions(dish.packageItems || activeSoups, dish.packageItems ? 'fa-utensils' : 'fa-bowl-rice', 'Sopa del día')}</div></div>` : ''}
+          ${dish.includesWater !== false ? `<div class="option-card water-card anim-fade-up-2"><div class="option-title">Agua del día (1 litro)</div><div class="option-list">${renderOptions(activeWaters, 'fa-glass-water', 'Agua del día')}</div></div>` : ''}
         </div>
       </div>`;
 
