@@ -337,6 +337,35 @@
       .tv-footer { flex-wrap: wrap; margin-top: 20px; }
       .dessert-intro { margin-bottom: 20px; }
     }
+
+    #tvScreen[data-brightness="2"] { filter: brightness(1.07) saturate(1.15) contrast(1.03); }
+    #tvScreen[data-brightness="3"] { filter: brightness(1.14) saturate(1.3) contrast(1.06); }
+    #tvScreen[data-brightness="4"] { filter: brightness(1.22) saturate(1.45) contrast(1.08); }
+    #tvScreen[data-kind="dish"] .dish-heading h2 { font-size: calc(4.3vw * var(--text-scale,1)); }
+    #tvScreen[data-kind="dish"] .dish-heading h2.long-title { font-size: calc(3.5vw * var(--text-scale,1)); }
+    #tvScreen[data-kind="dish"] .dish-heading p { font-size: calc(1.35vw * var(--text-scale,1)); }
+    #tvScreen[data-kind="dish"] .menu-option { font-size: calc(1.5vw * var(--text-scale,1)); }
+    #tvScreen[data-kind="dish"] .option-title { font-size: calc(1.45vw * var(--text-scale,1)); }
+    #tvScreen[data-kind="dish"] .price-value { font-size: calc(10vh * var(--text-scale,1)); }
+    #tvScreen[data-kind="dish"] .price-label { font-size: calc(2.7vh * var(--text-scale,1)); }
+    #tvScreen[data-kind="dish"] .takeout { font-size: calc(2.5vh * var(--text-scale,1)); }
+    #tvScreen .dessert-card h3 { font-size: calc(2vw * var(--text-scale,1)); }
+    #tvScreen .dessert-price { font-size: calc(3.9vw * var(--text-scale,1)); }
+    @media (orientation:landscape) and (max-height:650px) {
+      #tvScreen[data-kind="dish"] .dish-heading h2 { font-size: calc(4vw * var(--text-scale,1)); }
+      #tvScreen[data-kind="dish"] .dish-heading h2.long-title { font-size: calc(3vw * var(--text-scale,1)); }
+      #tvScreen[data-kind="dish"] .price-value { font-size: calc(8vh * var(--text-scale,1)); }
+    }
+    @media (max-aspect-ratio:1/1) {
+      #tvScreen[data-kind="dish"] .dish-heading h2, #tvScreen[data-kind="dish"] .dish-heading h2.long-title { font-size: calc(8vw * var(--text-scale,1)); }
+      #tvScreen[data-kind="dish"] .dish-heading p { font-size: calc(13px * var(--text-scale,1)); }
+      #tvScreen[data-kind="dish"] .menu-option, #tvScreen[data-kind="dish"] .option-title { font-size: calc(12px * var(--text-scale,1)); }
+      #tvScreen[data-kind="dish"] .price-value { font-size: calc(11vw * var(--text-scale,1)); }
+      #tvScreen[data-kind="dish"] .price-label { font-size: calc(3.5vw * var(--text-scale,1)); }
+      #tvScreen[data-kind="dish"] .takeout { font-size: calc(3vw * var(--text-scale,1)); }
+      #tvScreen .dessert-card h3 { font-size: calc(19px * var(--text-scale,1)); }
+      #tvScreen .dessert-price { font-size: calc(30px * var(--text-scale,1)); }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; } }
   </style>
 </head>
@@ -372,8 +401,8 @@
   </div>
 </div>
 
-<script src="menu-state.js?v=f7318be35728"></script>
-<script src="firebase-sync.js?v=a9241fdd685a"></script>
+<script src="menu-state.js?v=582839c44ccd"></script>
+<script src="firebase-sync.js?v=7c5210d99591"></script>
 <script>
   let currentSlideIdx = 0;
 
@@ -420,6 +449,10 @@
     const menuState = FondaMenu.load();
     if (!menuState) return;
 
+    const display = menuState.display || {brightness:1,textSize:1};
+    const displayScreen = document.getElementById('tvScreen');
+    displayScreen.dataset.brightness = display.brightness;
+    displayScreen.style.setProperty('--text-scale', display.textSize);
     const activeDishes = menuState.dishes.filter(d => d.active);
     const activeSoups = menuState.soups.filter(s => s.active);
     const activeWaters = menuState.waters.filter(w => w.active);
@@ -444,6 +477,7 @@
     `).join('');
     if (isDessert) {
       stage.innerHTML = renderDesserts(desserts);
+      fitDisplayText(display.textSize);
       return;
     }
     if (!activeDishes.length) {
@@ -495,7 +529,27 @@
       </div>`;
 
     stage.innerHTML = plateColumn + infoColumn;
+    fitDisplayText(display.textSize);
   }
+
+  function fitDisplayText(requested) {
+    if (typeof window.requestAnimationFrame !== 'function') return;
+    window.requestAnimationFrame(function () {
+      if (window.innerWidth <= window.innerHeight) return;
+      const screen = document.getElementById('tvScreen');
+      const stage = document.getElementById('tvSlideContent');
+      const info = stage.querySelector('.info-column, .dessert-page');
+      if (!info) return;
+      let scale = requested;
+      for (let step=0; step<30; step++) {
+        const textOverflows = Array.from(stage.querySelectorAll('.takeout, .price-value, .option-title')).some(node => node.scrollWidth > node.clientWidth + 2);
+        if (info.scrollHeight <= stage.clientHeight * .96 && !textOverflows) break;
+        scale = Math.max(.75, scale - .025);
+        screen.style.setProperty('--text-scale', scale);
+      }
+    });
+  }
+  window.addEventListener('resize', renderTvSlide);
 
   function goToSlide(index) { currentSlideIdx = index; renderTvSlide(); }
 

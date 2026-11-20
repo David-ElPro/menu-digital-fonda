@@ -79,6 +79,12 @@
         const snapshot = await transaction.get(menuRef);
         const state = FondaMenu.normalize(snapshot.exists() ? snapshot.data().state : initial);
         for (const change of changes) {
+          if (change.key === 'display') {
+            const choices = {brightness:[1,2,3,4], textSize:[1,1.15,1.3]};
+            if (!choices[change.field] || !choices[change.field].includes(change.value)) throw new Error('Ajuste de pantalla inválido.');
+            state.display[change.field] = change.value;
+            continue;
+          }
           if (!['dishes','soups','waters','desserts'].includes(change.key) || !['active','selectedVariant','price','takeoutPrice'].includes(change.field)) throw new Error('Cambio inválido.');
           const item = state[change.key].find(item => item.id === change.id);
           if (!item) throw new Error('Un platillo cambió. Recarga el panel.');

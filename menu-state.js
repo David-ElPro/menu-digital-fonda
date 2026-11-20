@@ -3,6 +3,7 @@
   'use strict';
   const STORAGE_KEY = 'fonda_menu_state_v1';
   const DEFAULT_STATE = {
+  "display": {"brightness": 1, "textSize": 1},
   "catalogVersion": 3,
   "dishes": [
     {
@@ -1070,6 +1071,11 @@
           });
           merged[key].push(...stored[key].filter(saved => !merged[key].some(item => item.id === saved.id)));
         }
+    const display = stored.display || {};
+    merged.display = {
+      brightness: [1, 2, 3, 4].includes(display.brightness) ? display.brightness : 1,
+      textSize: [1, 1.15, 1.3].includes(display.textSize) ? display.textSize : 1
+    };
     return merged;
   }
 

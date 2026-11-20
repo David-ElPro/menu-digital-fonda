@@ -1,6 +1,6 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 let stored=null;const nodes={};
-const ctx={console,localStorage:{getItem:()=>stored,setItem:(k,v)=>stored=v},document:{hidden:false,addEventListener(){},getElementById:id=>nodes[id]||={innerHTML:'',textContent:'',dataset:{}}},addEventListener(){},setInterval(){}};
+const ctx={console,localStorage:{getItem:()=>stored,setItem:(k,v)=>stored=v},document:{hidden:false,addEventListener(){},getElementById:id=>nodes[id]||={innerHTML:'',textContent:'',dataset:{},style:{setProperty(){}}}},addEventListener(){},setInterval(){}};
 ctx.window=ctx;vm.createContext(ctx);vm.runInContext(fs.readFileSync('menu-state.js','utf8'),ctx);
 vm.runInContext(fs.readFileSync('index.html','utf8').split('<script>')[1].split('</script>')[0],ctx);
 assert.equal(nodes.tvScreen.dataset.theme,'gold');

@@ -9,11 +9,11 @@ const storage = {getItem:()=>raw,setItem:(key,value)=>{if(blocked)throw Error('b
 function page(file) {
   const nodes = {}, events = {};
   const ctx = { structuredClone, console:{warn(){}}, localStorage:storage,
-    document:{hidden:false,addEventListener(){},getElementById(id){return nodes[id] ||= {dataset:{},value:id==='availabilityFilter'?'all':'',innerHTML:'',textContent:'',open:false,showModal(){this.open=true;},close(){this.open=false;},addEventListener(){},querySelectorAll(){return []}};}},
+    document:{hidden:false,addEventListener(){},getElementById(id){return nodes[id] ||= {dataset:{},style:{setProperty(){}},value:id==='availabilityFilter'?'all':'',innerHTML:'',textContent:'',open:false,showModal(){this.open=true;},close(){this.open=false;},addEventListener(){},querySelectorAll(){return []}};}},
     setInterval(){},alert(){},addEventListener(name,handler){events[name]=handler;}};
   ctx.FondaCloud={info:{authorized:true,ready:true,connected:true,empty:false},async publish(changes,initial){
     const latest=ctx.FondaMenu.load();
-    for(const change of changes)latest[change.key].find(x=>x.id===change.id)[change.field]=change.value;
+    for(const change of changes){if(change.key==='display')latest.display[change.field]=change.value;else latest[change.key].find(x=>x.id===change.id)[change.field]=change.value;}
     if(!ctx.FondaMenu.save(latest))throw Error('No se pudo guardar');
     return latest;
   }};
@@ -73,6 +73,14 @@ const other=page('admin.html');await other.run("editPrice('dishes','arrachera','
 admin.events.storage({key:'fonda_menu_state_v1'});assert(admin.run('pendingChanges().length')>0);await admin.run('confirmSave()');
 assert.equal(admin.ctx.FondaMenu.load().dishes.find(d=>d.id==='arrachera').price,160);
 console.log('OK: cambios de otra pestaña se combinan sin perder el borrador');
+admin.run("setDisplay('brightness',4);setDisplay('textSize',1.3)");
+assert.equal(admin.run("pendingChanges().filter(c=>c.key==='display').length"),2);
+await admin.run('confirmSave()');
+assert.equal(admin.ctx.FondaMenu.load().display.brightness,4);
+assert.equal(admin.ctx.FondaMenu.load().display.textSize,1.3);
+admin.run('resetDisplay()');await admin.run('confirmSave()');
+assert.equal(admin.ctx.FondaMenu.load().display.brightness,1);
+console.log('OK: ajustes de pantalla en borrador, confirmación y restauración');
 const crypto=require('node:crypto');
 for(const page of ['admin.html','index.html']) {
   const html=fs.readFileSync(page,'utf8');

@@ -42,6 +42,11 @@ await tv.ctx.FondaCloud.login('other@example.test','test');assert(!tv.ctx.FondaC
 await assert.rejects(()=>tv.ctx.FondaCloud.publish([],tv.ctx.FondaMenu.load()),/autorizada/);
 console.log('OK: sin red o sin permisos no publica, y no anuncia éxito antes de confirmar');
 await assert.rejects(()=>me.ctx.FondaCloud.publish([{key:'dishes',id:'pozole_pollo',field:'price',value:-10}],me.ctx.FondaMenu.load()),/Precio inválido/);
+await me.ctx.FondaCloud.publish([{key:'display',field:'brightness',value:4},{key:'display',field:'textSize',value:1.3}],me.ctx.FondaMenu.load());
+assert.equal(dad.ctx.FondaMenu.load().display.brightness,4);
+assert.equal(tv.ctx.FondaMenu.load().display.textSize,1.3);
+await assert.rejects(()=>me.ctx.FondaCloud.publish([{key:'display',field:'brightness',value:99}],me.ctx.FondaMenu.load()),/inválido/);
+console.log('OK: brillo y textos compartidos entre dispositivos y valores inválidos rechazados');
 await me.ctx.FondaCloud.logout();assert(!me.ctx.FondaCloud.info.authorized);
 console.log('OK: validación de precios y cierre de sesión');
 })().catch(error=>{console.error(error);process.exitCode=1;});

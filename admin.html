@@ -9,7 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <style> body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; } </style>
+    <style> body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; }
+      .display-panel { background:white; border:1px solid #cbd5e1; border-radius:20px; padding:18px; }
+      .display-levels { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:12px 0; }
+      .display-levels button { padding:12px 8px; border:2px solid #ddd; border-radius:12px; font-weight:700; background:#fff; font-size:13px; }
+      .display-levels button[aria-pressed="true"] { border-color:#b45309; background:#fff0be; color:#78350f; }
+      .display-preview { padding:18px; border-radius:14px; color:#54200f; background:linear-gradient(120deg,#ffca23,#ff7c12); overflow:hidden; }
+      .display-preview strong { display:block; background:#fff6e9; padding:10px; border-radius:10px; font-size:calc(16px * var(--preview-size,1)); }
+      .display-preview span { display:inline-block; background:#c81424; color:white; padding:8px 16px; border-radius:10px; margin-top:12px; font-size:calc(24px * var(--preview-size,1)); font-weight:900; }
+      @media(min-width:640px) { .display-levels { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+    </style>
 </head>
 <body class="min-h-screen pb-16">
 
@@ -47,6 +56,20 @@
       <button id="saveButton" onclick="openSaveModal()" disabled class="bg-emerald-700 disabled:opacity-40 text-white rounded-xl px-4 py-2 font-bold text-sm">Guardar cambios</button>
     </div>
 
+    <section class="display-panel">
+      <h2 class="font-extrabold text-lg">Ajustes para la TV</h2>
+      <p class="text-sm text-slate-600 mt-1">Prueba un nivel y guarda para verlo en la pantalla. Ajusta los colores del menú, no el brillo físico de la televisión.</p>
+      <h3 class="font-bold text-sm mt-4">Color y brillo visual</h3>
+      <div id="displayLevels" class="display-levels"></div>
+      <label class="block font-bold text-sm my-3">Tamaño de textos en la pantalla
+        <select id="displayTextSize" onchange="setDisplay('textSize',Number(this.value))" class="block w-full border rounded-xl p-3 mt-2">
+          <option value="1">Normal</option><option value="1.15">Grande (+15%)</option><option value="1.3">Extra grande (+30%)</option>
+        </select>
+      </label>
+      <p class="text-xs text-slate-500 mb-3">El tamaño se ajusta al espacio disponible para que no se corten las tarjetas. Estos ajustes se comparten con todas las pantallas.</p>
+      <div id="displayPreview" class="display-preview" aria-label="Vista previa de colores"><strong>Comida corrida • Hecha al momento</strong><span>$95.00</span></div>
+      <button onclick="resetDisplay()" class="text-sm font-bold underline mt-3">Volver al aspecto original</button>
+    </section>
     <!-- BAJA RÁPIDA -->
     <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 shadow-sm">
         <div class="flex items-center justify-between mb-2.5">
@@ -113,8 +136,8 @@
   </div>
 </dialog>
 
-<script src="menu-state.js?v=f7318be35728"></script>
-<script src="firebase-sync.js?v=a9241fdd685a"></script>
+<script src="menu-state.js?v=582839c44ccd"></script>
+<script src="firebase-sync.js?v=7c5210d99591"></script>
 <script>
     let publishing = false;
     let menuState = FondaMenu.load();
@@ -135,6 +158,9 @@
           }
         }
       }
+      for (const field of ['brightness','textSize']) {
+        if (menuState.display[field] !== savedState.display[field]) changes.push({key:'display',field,value:menuState.display[field],name:'Pantalla'});
+      }
       return changes;
     }
     function updateSaveStatus() {
@@ -145,7 +171,7 @@
     function openSaveModal() {
       const changes = pendingChanges();
       if (!changes.length && !FondaCloud.info.empty) return;
-      const labels = {active:'Disponibilidad', selectedVariant:'Variante', price:'Precio aquí', takeoutPrice:'Precio para llevar'};
+      const labels = {active:'Disponibilidad', selectedVariant:'Variante', price:'Precio aquí', takeoutPrice:'Precio para llevar',brightness:'Nivel de brillo',textSize:'Escala de textos'};
       document.getElementById('changeSummary').innerHTML = changes.map(c => `<li><strong>${escapeHtml(c.name)}</strong>: ${labels[c.field]} → ${escapeHtml(c.field === 'active' ? (c.value ? 'Activo' : 'Inactivo') : c.field.includes('rice') ? (c.value == null ? 'Sin precio para llevar' : '$'+money(c.value)) : c.value)}</li>`).join('') || '<li>Publicar el menú de este panel por primera vez.</li>';
       document.getElementById('saveError').textContent = '';
       if (!document.getElementById('saveModal').open) document.getElementById('saveModal').showModal();
@@ -193,7 +219,18 @@
         return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg).replace(/'/g, '%27');
     }
 
+    function setDisplay(field, value) { menuState.display[field] = value; renderAdmin(); }
+    function resetDisplay() { menuState.display = {brightness:1,textSize:1}; renderAdmin(); }
+    function renderDisplay() {
+      const labels = ['1 · Original','2 · Vivo','3 · Brillante','4 · Intenso'];
+      document.getElementById('displayLevels').innerHTML = labels.map((label,index)=>`<button type="button" aria-pressed="${menuState.display.brightness === index+1}" onclick="setDisplay('brightness',${index+1})">${label}</button>`).join('');
+      document.getElementById('displayTextSize').value = String(menuState.display.textSize);
+      const filters = ['none','brightness(1.07) saturate(1.15) contrast(1.03)','brightness(1.14) saturate(1.3) contrast(1.06)','brightness(1.22) saturate(1.45) contrast(1.08)'];
+      document.getElementById('displayPreview').style.filter = filters[menuState.display.brightness-1];
+      document.getElementById('displayPreview').style.setProperty('--preview-size',menuState.display.textSize);
+    }
     function renderAdmin() {
+        renderDisplay();
         updateSaveStatus();
         const activeDishes = menuState.dishes.filter(d => d.active);
         document.getElementById('activeCountBadge').textContent = `${activeDishes.length} activos`;
@@ -324,6 +361,7 @@
             const changes = pendingChanges();
             menuState = FondaMenu.load(); savedState = structuredClone(menuState);
             for (const change of changes) {
+              if (change.key === 'display') { menuState.display[change.field] = change.value; continue; }
               const item = menuState[change.key].find(item=>item.id===change.id);
               if (item) item[change.field] = change.value;
             }

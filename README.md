@@ -186,3 +186,13 @@ Fuentes: [resolución de aplicaciones Samsung](https://developer.samsung.com/sma
 Solo actualiza la pantalla si cambió el contenido y descarta una respuesta que quedó atrasada respecto de una actualización del SDK. Los errores conservan el último menú y espacian los reintentos hasta 60 segundos. Volver a la pestaña o recuperar internet dispara una consulta. El tiempo normal de actualización por esta vía es de unos 10 segundos más la respuesta de red; no es una conexión instantánea. No requiere recargar toda la página para cada cambio.
 
 Se verificó que la lectura pública del documento publicado responde HTTP 200. `node tests/tv-sync.test.cjs` prueba el funcionamiento sin SDK, respuestas repetidas, errores de red, permisos, recuperación y respuestas atrasadas. Falta verificar esta vía en el televisor físico tras publicar Hosting y recargar su pestaña. Cada pantalla abierta realiza lecturas periódicas de Firestore.
+
+## Ajustes de color y legibilidad
+
+En el admin, **Ajustes para la TV** permite seleccionar cuatro niveles de brillo visual y saturación: Original, Vivo, Brillante e Intenso. Incluye vista previa y restauración. Estos filtros modifican el contenido, no la retroiluminación física de la TV.
+
+El tamaño de textos de la pantalla tiene tres opciones: Normal, Grande (+15%) y Extra grande (+30%). Se amplían títulos, acompañamientos, opciones y precios, sin aumentar toda la interfaz como un zoom de navegador. En horizontal se reduce la escala automáticamente si falta espacio; en vertical se permite desplazamiento. Los cambios son borradores hasta confirmar Guardar y aplicar y se comparten con todas las pantallas, incluida la lectura compatible de TV cada 10 segundos.
+
+Los ajustes se guardan en `state.display` (`brightness`: 1–4; `textSize`: 1, 1.15 o 1.3). Los menús existentes usan valores normales por defecto y conservan sus precios y disponibilidad. Para esta actualización publicar Hosting y reglas con `firebase deploy --only hosting,firestore:rules`, recargar admin y TV, seleccionar los ajustes y guardar. Las reglas validan los valores sin excluir documentos anteriores que aún no incluyen `display`.
+
+Se probaron persistencia, borradores, restauración, recepción por Firestore y por REST y rechazo de valores inválidos. Se comprobó en navegador el nivel 4 con texto extra grande a 800×450, 1366×640, 1920×1080 y 3840×2160 sin desbordamiento horizontal. La selección final de color requiere probar la televisión física.
